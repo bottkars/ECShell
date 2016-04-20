@@ -57,7 +57,7 @@ function Connect-ECSSystem
         }
         #>
         $auth = [System.Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes(':'+$Token))
-        $global:ECSAuthHeaders = @{ "X-SDS-AUTH-TOKEN" = $Headers.Headers.'X-SDS-AUTH-TOKEN' }
+        $global:ECSAuthHeaders = @{ "X-SDS-AUTH-TOKEN" = $Headers.Headers.'X-SDS-AUTH-TOKEN'}
         Write-Host "Successfully connected to ECS $ECSbaseurl"
     }
     End
@@ -198,4 +198,34 @@ function Get-ECSnamespaces
 
     }
 }
+function Disconnect-ECSSystem
+{
+begin
+{}
+process
+{
+Invoke-WebRequest -Uri "$Global:ECSbaseurl/logout" -Headers $Global:ECSAuthHeaders -Verbose
+}
+end{}
+}
+function Get-ECSWhoAmI
+{
+[CmdletBinding(DefaultParameterSetName = '0')]
+param()
+begin
+{
+$ContentType = "application/json"
+$IncludeProperty = ('common_name','distinguished_name','last_time_password_changed','namespace')
+}
+process
+{
+try
+    {
+    Write-Verbose "$Global:ECSbaseurl/users/whoami"
+    (Invoke-RestMethod -Uri "$Global:ECSbaseurl/user/whoami" -Headers $Global:ECSAuthHeaders -ContentType $ContentType).childnodes[1]  | Select-Object -Property $IncludeProperty  -ExpandProperty roles     }catch    {    #Get-ECSWebException -ExceptionMessage 
+    $_.Exception.Message    }
+}
+end{}
+}
+
 

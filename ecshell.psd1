@@ -64,9 +64,12 @@ PowerShellVersion = '3.0'
 
 # Modules to import as nested modules of the module specified in RootModule/ModuleToProcess
 NestedModules = @('.\utils\utils.psm1'
+'.\errors\ecserrors.psm1',
 '.\Configuration\ECSConfiguration.psm1'
 '.\Provisioning\ECSvarray.psm1',
-'.\Provisioning\ECSbucket.psm1')
+'.\Provisioning\ECSbucket.psm1',
+'.\Provisioning\ECSnodes.psm1',
+'.\Users\ECSObjectUser.psm1')
 
 # Functions to export from this module
 FunctionsToExport = '*ECS*'
