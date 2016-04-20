@@ -9,7 +9,7 @@
 @{
 
 # Script module or binary module file associated with this manifest.
-# RootModule = ''
+RootModule = 'ECShell.psm1'
 
 # Version number of this module.
 ModuleVersion = '1.0'
@@ -63,13 +63,16 @@ PowerShellVersion = '3.0'
 # FormatsToProcess = @()
 
 # Modules to import as nested modules of the module specified in RootModule/ModuleToProcess
-NestedModules = @('.\utils\utils.psm1')
+NestedModules = @('.\utils\utils.psm1'
+'.\Configuration\ECSConfiguration.psm1'
+'.\Provisioning\ECSvarray.psm1',
+'.\Provisioning\ECSbucket.psm1')
 
 # Functions to export from this module
-FunctionsToExport = '*'
+FunctionsToExport = '*ECS*'
 
 # Cmdlets to export from this module
-CmdletsToExport = '*'
+CmdletsToExport = '*ECS*'
 
 # Variables to export from this module
 VariablesToExport = '*'
@@ -87,7 +90,7 @@ AliasesToExport = '*'
 # PrivateData = ''
 
 # HelpInfo URI of this module
-# HelpInfoURI = ''
+HelpInfoURI = 'https://github.com/bottkars/ECShell'
 
 # Default prefix for commands exported from this module. Override the default prefix using Import-Module -Prefix.
 # DefaultCommandPrefix = ''

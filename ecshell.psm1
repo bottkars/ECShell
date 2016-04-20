@@ -65,7 +65,6 @@ function Connect-ECSSystem
     Get-ECSproperties
     }
 }
-
 function Get-ECSproperties
 {
     [CmdletBinding(DefaultParameterSetName = '0')]
@@ -129,106 +128,6 @@ $no = New-Object System.Management.Automation.Host.ChoiceDescription "&No","$Not
 $options = [System.Management.Automation.Host.ChoiceDescription[]]($no, $yes)
 $result = $host.ui.PromptForChoice($title, $message, $options, 0)
 return ($result)
-}
-function Get-ECSlicense
-{
-    [CmdletBinding(DefaultParameterSetName = '0')]
-    Param
-    (
-    )
-    Begin
-    {
-    $Myself = $MyInvocation.MyCommand.Name.Substring(7)
-    #$Excludeproperties = ('links','name','id')
-    $ContentType = "application/json"
-    }
-    Process
-    {
-    $Uri = "$ECSbaseurl/$Myself.json"
-    try
-        {
-        (Invoke-RestMethod -Uri $Uri -Headers $ECSAuthHeaders -Method Get -ContentType $ContentType ) | Select-Object -ExpandProperty license_feature 
-        }
-    catch
-        {
-        #Get-ECSWebException -ExceptionMessage 
-        $_.Exception.Message
-        break
-        }
-    }
-    End
-    {
-
-    }
-}
-function Get-ECScertificate
-{
-    [CmdletBinding(DefaultParameterSetName = '0')]
-    Param
-    (
-    )
-    Begin
-    {
-    $Myself = $MyInvocation.MyCommand.Name.Substring(7)
-    $class = "object-cert/keystore.json"
-    $Expandproperty = "chain"
-    $ContentType = "application/json"
-    }
-    Process
-    {
-    $Uri = "$ECSbaseurl/$class"
-    try
-        {
-        (Invoke-RestMethod -Uri $Uri -Headers $ECSAuthHeaders -Method Get -ContentType $ContentType ) | Select-Object -ExpandProperty $Expandproperty
-        }
-    catch
-        {
-        #Get-ECSWebException -ExceptionMessage 
-        $_.Exception.Message
-        break
-        }
-    }
-    End
-    {
-
-    }
-}
-function Get-ECSbucket
-{
-    [CmdletBinding(DefaultParameterSetName = '0')]
-    Param
-    (
-    )
-    Begin
-    {
-    $Myself = $MyInvocation.MyCommand.Name.Substring(7)
-    $class = "object"
-    $Expandproperty = "object_bucket"
-    $ContentType = "application/json"
-    $Body = @{  
-    namespace = "ns1"
-    }  
-    $JSonBody = ConvertTo-Json $Body
-    }
-    Process
-    {
-    $Uri = "$ECSbaseurl/object/bucket.json"
-    try
-        {
-        Write-Verbose $Uri
-        (Invoke-RestMethod -Uri $Uri -Headers $ECSAuthHeaders -Method Get -Body $Body -ContentType $ContentType )| Select-Object -ExpandProperty $Expandproperty
-        }
-    catch
-        {
-        #Get-ECSWebException -ExceptionMessage 
-        $_.Exception.Message
-        break
-        }
-    }
-    End
-    {
-
-    }
 }
 function Get-ECSbaseurl
 {
