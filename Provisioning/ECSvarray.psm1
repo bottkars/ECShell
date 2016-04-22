@@ -101,24 +101,27 @@ function New-ECSvarray
     Begin
     {
     $Myself = $MyInvocation.MyCommand.Name.Substring(7)
-    $class = "object"
+    $class = "vdc/data-services"
     $Expandproperty = "varray"
     $ContentType = "application/json"
-    $body = @{ name = $PoolName
+    $jsonbody = [ordered]@{ name = $PoolName
     isProtected = "$($isProtected.IsPresent)"
     description = $description
-    }
-    $jsonbody = ConvertTo-Json $body
-    $jsonbody
+    } | ConvertTo-Json 
     }
     Process
     {
     
-    $Uri = "$ECSbaseurl/vdc/data-services/varrays.json"
+    $Uri = "$ECSbaseurl/vdc/$class/varrays.json"
     Write-Verbose $Uri
     try
         {
-        (Invoke-RestMethod -Uri $Uri -Headers $ECSAuthHeaders -Method Post -Body $jsonbody -ContentType $ContentType ) #| Select-Object -ExpandProperty $Expandproperty
+        if ($PSCmdlet.MyInvocation.BoundParameters["verbose"].IsPresent)
+            {
+            Write-Host -ForegroundColor Yellow "Calling $uri with Method $method and body:
+            $JSonBody"
+            }
+        (Invoke-RestMethod -Uri $Uri -Headers $ECSAuthHeaders -Method POST -Body $jsonbody -ContentType $ContentType ) #| Select-Object -ExpandProperty $Expandproperty
         }
     catch
         {

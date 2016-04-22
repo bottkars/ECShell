@@ -1,5 +1,4 @@
-﻿# from GET /vdc/users.json
-function Get-ECSManagementUser
+﻿function Get-ECSManagementUser
 {
     [CmdletBinding(DefaultParameterSetName = '1')]
     Param
@@ -49,17 +48,6 @@ function Get-ECSManagementUser
 
     }
 }
-
-<#PUT /vdc/users/{userid}
-{
-  "mgmt_user_info_update": {
-    "password": "password",
-    "isSystemAdmin": "true",
-    "isSystemMonitor": "false"
-  }
-}
-#>
-
 function Set-ECSManagementUser
 {
     [CmdletBinding(DefaultParameterSetName = '1')]

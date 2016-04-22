@@ -161,20 +161,23 @@ function Remove-ECSbucket
     Begin
     {
     $Myself = $MyInvocation.MyCommand.Name.Substring(7)
-    $class = "object"
+    $class = "object/bucket"
+    $Method = "POST"
     $Expandproperty = "object_bucket"
     $ContentType = "application/json"
     }
     Process
     {
-    $Uri = "$ECSbaseurl/object/bucket/$Bucketname/deactivate.json"
-    $Body = @{namespace = "$Namespace"}
-    $JSonBody = ConvertTo-Json $Body
-
+    $Uri = "$ECSbaseurl/$class/$Bucketname/deactivate.json"
+    #$JSonBody = @{namespace = "$Namespace"} | ConvertTo-Json 
     try
         {
-        Write-Verbose $Uri
-        (Invoke-RestMethod -Uri $Uri -Headers $ECSAuthHeaders -Body $JSonBody -Method Delete -ContentType $ContentType )# | Select-Object -ExpandProperty $Expandproperty
+        if ($PSCmdlet.MyInvocation.BoundParameters["verbose"].IsPresent)
+            {
+            Write-Host -ForegroundColor Yellow "Calling $uri with Method $method and body:
+            #$JSonBody"
+            }
+        (Invoke-RestMethod -Uri $Uri -Headers $ECSAuthHeaders -Method $Method -ContentType $ContentType )# | Select-Object -ExpandProperty $Expandproperty
         }
     catch
         {
