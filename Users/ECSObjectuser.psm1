@@ -292,20 +292,15 @@ function Set-ECSObjectUserSecretKeys
     $Myself = $MyInvocation.MyCommand.Name.Substring(7)
     $class = "object/user-secret-keys"
     $method = "POST"
-    $Excludeproperty = "name"
-    $Expandproperty = "link"
+    $Excludeproperty = "link"
     $ContentType = "application/json"
     $Uri = "$ECSbaseurl/$class/$userid.json"
     }
     Process
     {
-    $Body = @{ user_secret_key_create = 
-    @{
-    existing_key_expiry_time_mins = @{ $expire_existing_minutes = "true"}
+    $JSonBody = [ordered]@{existing_key_expiry_time_mins = $expire_existing_minutes
     namespace = $Namespace
-    secretkey = $Secretkey} 
-    }
-    $JSonBody = ConvertTo-Json $Body #-Compress
+    secretkey = $Secretkey } | ConvertTo-Json #-Depth 2 #$Body #-Compress
     try
         {
         if ($PSCmdlet.MyInvocation.BoundParameters["verbose"].IsPresent)
@@ -313,7 +308,7 @@ function Set-ECSObjectUserSecretKeys
             Write-Host -ForegroundColor Yellow "Calling $uri with Method $method and body:
             $JSonBody"
             }
-        Invoke-RestMethod -Uri $Uri -Headers $ECSAuthHeaders -Body $JSonBody -Method $method -ContentType $ContentType #| Select-Object  -ExpandProperty $Expandproperty
+        Invoke-RestMethod -Uri $Uri -Headers $ECSAuthHeaders -Body $JSonBody -Method $method -ContentType $ContentType | Select-Object  -ExcludeProperty $Excludeproperty
         }
     catch
         {
@@ -321,7 +316,7 @@ function Set-ECSObjectUserSecretKeys
         $_.Exception.Message
         break
         }
-    Get-ECSObjectuserInfo -userid $UserID 
+    # Get-ECSObjectuserInfo -userid $UserID 
     }
     End
     {
