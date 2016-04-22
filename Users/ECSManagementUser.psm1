@@ -104,13 +104,12 @@ function Set-ECSManagementUser
         {
         $SysMonitor= "false"
         }
-    $Body = @{
-    userId = $userid
+    $JSonBody = [ordered]@{
      password= "$Password"
      isSystemAdmin= "$SysAdmin"
      isSystemMonitor = "$SysMonitor"
-     }#{ mgmt_user_info_update = @ }
-    $JSonBody = ConvertTo-Json $Body 
+     } | ConvertTo-Json #{ mgmt_user_info_update = @ }
+    # $JSonBody =  $Body 
     try
         {
         if ($PSCmdlet.MyInvocation.BoundParameters["verbose"].IsPresent)
@@ -118,7 +117,7 @@ function Set-ECSManagementUser
             Write-Host -ForegroundColor Yellow "Calling $uri with Method $method and body:
             $JSonBody"
             }
-        Invoke-RestMethod -Uri $Uri -Headers $ECSAuthHeaders -Method $method -Body $JSonBody -ContentType $ContentType | Select-Object  -ExpandProperty $Expandproperty
+        Invoke-RestMethod -Uri $Uri -Headers $ECSAuthHeaders -Method $method -Body $JSonBody -ContentType $ContentType #| #Select-Object  -ExpandProperty $Expandproperty
         }
     catch
         {
@@ -126,7 +125,7 @@ function Set-ECSManagementUser
         $_.Exception.Message
         break
         }
-    #Get-ECSManagementUser -userid $UserID 
+    Get-ECSManagementUser -userid $UserID 
     }
     End
     {

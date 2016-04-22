@@ -124,10 +124,9 @@ function Lock-ECSObjectuser
         {
         $locked = "true"
         }
-    $Body = @{ user = $userid
+    $JSonBody = [ordered]@{ user = $userid
      namespace = $Namespace
-     isLocked = "$Locked"}
-    $JSonBody = ConvertTo-Json $Body
+     isLocked = "$Locked"} | ConvertTo-Json
     try
         {
         Write-Verbose $Uri
