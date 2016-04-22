@@ -69,7 +69,8 @@ NestedModules = @('.\utils\utils.psm1'
 '.\Provisioning\ECSvarray.psm1',
 '.\Provisioning\ECSbucket.psm1',
 '.\Provisioning\ECSnodes.psm1',
-'.\Users\ECSObjectUser.psm1')
+'.\Users\ECSObjectUser.psm1',
+'.\Users\ECSManagementUser.psm1')
 
 # Functions to export from this module
 FunctionsToExport = '*ECS*'
