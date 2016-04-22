@@ -20,8 +20,8 @@ function Connect-ECSSystem
                    Position=0)]
         $ECSIP = "192.168.2.193",
         $ECSPort = 4443,
-        $user = "root",
-        $password = "Password123!",
+        #[Parameter(Mandatory=$true)]$user = "root",
+        [pscredential]$Credentials,
         [switch]$trustCert = $true
     )
 
@@ -34,8 +34,12 @@ function Connect-ECSSystem
     }
     Process
     {
-    $SecurePassword = ConvertTo-SecureString $password -AsPlainText -Force
-    $Credentials = New-Object System.Management.Automation.PSCredential (“$user”,$Securepassword)
+    if (!$Credentials)
+        {
+        $User = Read-Host -Prompt "Please Enter ECS username"
+        $SecurePassword = Read-Host -Prompt "Enter ECS Password for user $user" -AsSecureString
+        $Credentials = New-Object System.Management.Automation.PSCredential (“$user”,$Securepassword)
+        }
     write-Verbose "Generating Login Token"
     $Global:ECSbaseurl = "https://$($ECSIP):$ECSPort"
     Write-Verbose $ECSbaseurl
@@ -204,7 +208,8 @@ begin
 {}
 process
 {
-Invoke-WebRequest -Uri "$Global:ECSbaseurl/logout" -Headers $Global:ECSAuthHeaders -Verbose
+
+Invoke-WebRequest -Uri "$Global:ECSbaseurl/logout" -Headers $Global:ECSAuthHeaders
 }
 end{}
 }

@@ -154,7 +154,9 @@ function Remove-ECSbucket
     Param
     (
         [Parameter(Mandatory=$true,ValueFromPipelineByPropertyName=$true,ParameterSetName='1')]
-        [alias('name')][string]$Bucketname
+        [alias('name')][string]$Bucketname,
+        [Parameter(Mandatory=$true,ValueFromPipelineByPropertyName=$true,ParameterSetName='1')]
+        [alias('ns')][string]$Namespace
     )
     Begin
     {
@@ -166,10 +168,13 @@ function Remove-ECSbucket
     Process
     {
     $Uri = "$ECSbaseurl/object/bucket/$Bucketname/deactivate.json"
+    $Body = @{namespace = "$Namespace"}
+    $JSonBody = ConvertTo-Json $Body
+
     try
         {
         Write-Verbose $Uri
-        (Invoke-RestMethod -Uri $Uri -Headers $ECSAuthHeaders -Method Post -ContentType $ContentType )# | Select-Object -ExpandProperty $Expandproperty
+        (Invoke-RestMethod -Uri $Uri -Headers $ECSAuthHeaders -Body $JSonBody -Method Delete -ContentType $ContentType )# | Select-Object -ExpandProperty $Expandproperty
         }
     catch
         {
