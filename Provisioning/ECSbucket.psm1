@@ -146,8 +146,6 @@ function Get-ECSbucketInfo
     }
 }
 
-#
-#https://192.168.0.0:4443/object/object/bucket/bucket2/deactivate.json
 function Remove-ECSbucket
 {
     [CmdletBinding(DefaultParameterSetName = '1')]
@@ -162,22 +160,22 @@ function Remove-ECSbucket
     {
     $Myself = $MyInvocation.MyCommand.Name.Substring(7)
     $class = "object/bucket"
-    $Method = "POST"
+    $Method = "Post"
     $Expandproperty = "object_bucket"
     $ContentType = "application/json"
     }
     Process
     {
     $Uri = "$ECSbaseurl/$class/$Bucketname/deactivate.json"
-    #$JSonBody = @{namespace = "$Namespace"} | ConvertTo-Json 
+    $JSonBody = @{namespace = "$Namespace"} | ConvertTo-Json 
     try
         {
         if ($PSCmdlet.MyInvocation.BoundParameters["verbose"].IsPresent)
             {
             Write-Host -ForegroundColor Yellow "Calling $uri with Method $method and body:
-            #$JSonBody"
+            $JSonBody"
             }
-        (Invoke-RestMethod -Uri $Uri -Headers $ECSAuthHeaders -Method $Method -ContentType $ContentType )# | Select-Object -ExpandProperty $Expandproperty
+        Invoke-RestMethod -Uri $Uri -Headers $ECSAuthHeaders -Body $JSonBody -Method $Method -ContentType $ContentType
         }
     catch
         {
@@ -189,5 +187,157 @@ function Remove-ECSbucket
     End
     {
 
+    }
+}
+
+function Add-ECSbucketTag
+{
+    [CmdletBinding(DefaultParameterSetName = '1')]
+    Param
+    (
+        [Parameter(Mandatory=$true,ValueFromPipelineByPropertyName=$true,ParameterSetName='1')]
+        [alias('name')][string]$Bucketname,
+        [Parameter(Mandatory=$true,ValueFromPipelineByPropertyName=$true,ParameterSetName='1')]
+        [string]$Key,
+        [Parameter(Mandatory=$true,ValueFromPipelineByPropertyName=$false,ParameterSetName='1')]
+        $namespace = "ns1",
+        [Parameter(Mandatory=$true,ValueFromPipelineByPropertyName=$true,ParameterSetName='1')]
+        [string]$Value
+    )
+    Begin
+    {
+    $Myself = $MyInvocation.MyCommand.Name.Substring(7)
+    $class = "object/bucket"
+    $Method = "Post"
+    $Expandproperty = "TagSet"
+    $ContentType = "application/json"
+    }
+    Process
+    {
+    $Uri = "$ECSbaseurl/$class/$Bucketname/tags.json"
+    $JSonBody = [ordered]@{ TagSet = @(@{Key = $key
+    Value = $Value })
+    namespace ="$Namespace"} | ConvertTo-Json 
+    try
+        {
+        if ($PSCmdlet.MyInvocation.BoundParameters["verbose"].IsPresent)
+            {
+            Write-Host -ForegroundColor Yellow "Calling $uri with Method $method and body:
+            $JSonBody"
+            }
+        Invoke-RestMethod -Uri $Uri -Headers $ECSAuthHeaders -Body $JSonBody -Method $Method -ContentType $ContentType
+        }
+    catch
+        {
+        #Get-ECSWebException -ExceptionMessage 
+        $_.Exception.Message
+        break
+        }
+    Get-ECSbucketInfo -Namespace $namespace -Bucketname $Bucketname | Select-Object @{N="Bucketname";E={$_.name}}, namespace, TagSet
+    }
+    End
+    {
+    
+    }
+}
+function Set-ECSbucketTag
+{
+    [CmdletBinding(DefaultParameterSetName = '1')]
+    Param
+    (
+        [Parameter(Mandatory=$true,ValueFromPipelineByPropertyName=$true,ParameterSetName='1')]
+        [alias('name')][string]$Bucketname,
+        [Parameter(Mandatory=$true,ValueFromPipelineByPropertyName=$true,ParameterSetName='1')]
+        [string]$Key,
+        [Parameter(Mandatory=$true,ValueFromPipelineByPropertyName=$false,ParameterSetName='1')]
+        $namespace = "ns1",
+        [Parameter(Mandatory=$true,ValueFromPipelineByPropertyName=$true,ParameterSetName='1')]
+        [string]$Value
+    )
+    Begin
+    {
+    $Myself = $MyInvocation.MyCommand.Name.Substring(7)
+    $class = "object/bucket"
+    $Method = "Put"
+    $Expandproperty = "TagSet"
+    $ContentType = "application/json"
+    }
+    Process
+    {
+    $Uri = "$ECSbaseurl/$class/$Bucketname/tags.json"
+    $JSonBody = [ordered]@{ TagSet = @(@{Key = $key
+    Value = $Value })
+    namespace ="$Namespace"} | ConvertTo-Json 
+    try
+        {
+        if ($PSCmdlet.MyInvocation.BoundParameters["verbose"].IsPresent)
+            {
+            Write-Host -ForegroundColor Yellow "Calling $uri with Method $method and body:
+            $JSonBody"
+            }
+        Invoke-RestMethod -Uri $Uri -Headers $ECSAuthHeaders -Body $JSonBody -Method $Method -ContentType $ContentType
+        }
+    catch
+        {
+        #Get-ECSWebException -ExceptionMessage 
+        $_.Exception.Message
+        break
+        }
+    Get-ECSbucketInfo -Namespace $namespace -Bucketname $Bucketname | Select-Object @{N="Bucketname";E={$_.name}}, namespace, TagSet
+    }
+    End
+    {
+    
+    }
+}
+
+function Remove-ECSbucketTag
+{
+    [CmdletBinding(DefaultParameterSetName = '1')]
+    Param
+    (
+        [Parameter(Mandatory=$true,ValueFromPipelineByPropertyName=$true,ParameterSetName='1')]
+        [alias('name')][string]$Bucketname,
+        [Parameter(Mandatory=$true,ValueFromPipelineByPropertyName=$true,ParameterSetName='1')]
+        [string]$Key,
+        [Parameter(Mandatory=$true,ValueFromPipelineByPropertyName=$false,ParameterSetName='1')]
+        $namespace = "ns1",
+        [Parameter(Mandatory=$true,ValueFromPipelineByPropertyName=$true,ParameterSetName='1')]
+        [string]$Value
+    )
+    Begin
+    {
+    $Myself = $MyInvocation.MyCommand.Name.Substring(7)
+    $class = "object/bucket"
+    $Method = "Delete"
+    $Expandproperty = "TagSet"
+    $ContentType = "application/json"
+    }
+    Process
+    {
+    $Uri = "$ECSbaseurl/$class/$Bucketname/tags.json"
+    $JSonBody = [ordered]@{ TagSet = @(@{Key = $key
+    Value = $Value })
+    namespace ="$Namespace"} | ConvertTo-Json 
+    try
+        {
+        if ($PSCmdlet.MyInvocation.BoundParameters["verbose"].IsPresent)
+            {
+            Write-Host -ForegroundColor Yellow "Calling $uri with Method $method and body:
+            $JSonBody"
+            }
+        Invoke-RestMethod -Uri $Uri -Headers $ECSAuthHeaders -Body $JSonBody -Method $Method -ContentType $ContentType
+        }
+    catch
+        {
+        #Get-ECSWebException -ExceptionMessage 
+        $_.Exception.Message
+        break
+        }
+    Get-ECSbucketInfo -Namespace $namespace -Bucketname $Bucketname | Select-Object @{N="Bucketname";E={$_.name}}, namespace, TagSet
+    }
+    End
+    {
+    
     }
 }
