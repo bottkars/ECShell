@@ -24,8 +24,8 @@ function Get-ECSvarrays
         }
     catch
         {
-        #Get-ECSWebException -ExceptionMessage 
-        $_.Exception.Message
+        Get-ECSWebException -ExceptionMessage $_
+        #$_.Exception.Message
         break
         }
         $Request | Select-Object @{N="StoragePoolID";E={$_.id}},* -ExcludeProperty $Excludeproperty
@@ -65,8 +65,8 @@ function Get-ECSvarray
         }
     catch
         {
-        #Get-ECSWebException -ExceptionMessage 
-        $_.Exception.Message
+        Get-ECSWebException -ExceptionMessage $_
+        #$_.Exception.Message
         break
         }
     }
@@ -125,8 +125,8 @@ function New-ECSvarray
         }
     catch
         {
-        #Get-ECSWebException -ExceptionMessage 
-        $_.Exception.Message
+        Get-ECSWebException -ExceptionMessage $_
+        #$_.Exception.Message
         break
         }
     }
