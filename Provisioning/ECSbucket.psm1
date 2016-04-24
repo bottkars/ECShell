@@ -1033,7 +1033,6 @@ function Remove-ECSBucketSearchMetadata
     
     }
 }
-#PUT /object/bucket/{bucketName}/defaultGroup
 function Set-ECSBucketDefaultGroupPermissions
 {
     [CmdletBinding(DefaultParameterSetName = '1')]
@@ -1101,4 +1100,73 @@ namespace ="$Namespace"} | ConvertTo-Json
     
     }
 }
+function Get-ECSBucketACLGroups
+{
+    [CmdletBinding(DefaultParameterSetName = '1')]
+    Param
+    (
+    )
+    Begin
+    {
+    $Myself = $MyInvocation.MyCommand.Name.Substring(7)
+    $class = "object/bucket/acl/groups.json"
+    $Excludeproperty = "name"
+    $Expandproperty = "Group"
+    $ContentType = "application/json"
+    $Uri = "$ECSbaseurl/$class"
+    $method = "Get"
+    }
+    Process
+    {
+    try
+        {
+        Write-Verbose $Uri
+        Invoke-RestMethod -Uri $Uri -Headers $ECSAuthHeaders -Method $method -ContentType $ContentType | Select-Object -ExpandProperty $Expandproperty
+        }
+    catch
+        {
+        Get-ECSWebException -ExceptionMessage $_
+        #$_.Exception.Message
+        break
+        }
+    }
+    End
+    {
 
+    }
+}
+function Get-ECSBucketACLPermissions
+{
+    [CmdletBinding(DefaultParameterSetName = '1')]
+    Param
+    (
+    )
+    Begin
+    {
+    $Myself = $MyInvocation.MyCommand.Name.Substring(7)
+    $class = "object/bucket/acl/permissions.json"
+    $Excludeproperty = "name"
+    $Expandproperty = "permission"
+    $ContentType = "application/json"
+    $Uri = "$ECSbaseurl/$class"
+    $method = "Get"
+    }
+    Process
+    {
+    try
+        {
+        Write-Verbose $Uri
+        Invoke-RestMethod -Uri $Uri -Headers $ECSAuthHeaders -Method $method -ContentType $ContentType | Select-Object -ExpandProperty $Expandproperty
+        }
+    catch
+        {
+        Get-ECSWebException -ExceptionMessage $_
+        #$_.Exception.Message
+        break
+        }
+    }
+    End
+    {
+
+    }
+}

@@ -69,6 +69,7 @@ NestedModules = @('.\utils\utils.psm1'
 '.\Provisioning\ECSvarray.psm1',
 '.\Provisioning\ECSbucket.psm1',
 '.\Provisioning\ECSnodes.psm1',
+'.\Provisioning\ECSbaseurl.psm1',
 '.\Users\ECSObjectUser.psm1',
 '.\Users\ECSObjectUserKeys.psm1',
 '.\Users\ECSManagementUser.psm1')
