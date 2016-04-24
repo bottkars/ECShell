@@ -23,6 +23,11 @@ user_scope
 GLOBAL
 
 ```
+you may alos use the pipeline to pass credentials
+```powershell
+Get-Credential -UserName root  -Message "enter password for ECS" | Connect-ECSSystem -ECSIP 192.168.2.246
+Successfully connected to ECS https://192.168.2.246:4443
+```
 
 get a list of currently available commands
 ```Powershell
