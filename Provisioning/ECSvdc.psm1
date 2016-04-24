@@ -1,5 +1,4 @@
-﻿#GET /object/vdcs/vdc/local
-function Get-ECSlocalvdc
+﻿function Get-ECSlocalvdc
 {
     [CmdletBinding(DefaultParameterSetName = '0')]
     Param
@@ -71,7 +70,6 @@ function Get-ECSvdcs
 
     }
 }
-# GET /object/vdcs/vdc/local/secretkey
 function Get-ECSlocalvdcSecretKey
 {
     [CmdletBinding(DefaultParameterSetName = '0')]
@@ -108,10 +106,6 @@ function Get-ECSlocalvdcSecretKey
 
     }
 }
-
-#GET /object/vdcs/vdc/{vdcName}	Gets the details for a VDC specified by name
-#GET /object/vdcs/vdcid/{vdcId}
-#GET /object/vdcs/vdc/local
 function Get-ECSvdc
 {
     [CmdletBinding(DefaultParameterSetName = '1')]
@@ -164,13 +158,6 @@ function Get-ECSvdc
 
     }
 }
-<#
-{
-  "vdcName": "",
-  "interVdcEndPoints": "",
-  "interVdcCmdEndPoints": "",
-  "secretKeys": ""
-}#>
 function Set-ECSvdc
 {
     [CmdletBinding(DefaultParameterSetName = '1')]
@@ -196,14 +183,12 @@ function Set-ECSvdc
     }
     Process
     {
-        $JSonBody = [ordered]@{ 
+    $JSonBody = [ordered]@{ 
     vdcName = $vdcName
     interVdcEndPoints = $interVdcEndPoints
     interVdcCmdEndPoints = $interVdcCmdEndPoints
     secretKeys = $secretkeys} | ConvertTo-Json 
-
     $Uri = "$ECSbaseurl/object/vdcs/vdc/$vdcName.json"
-
     try
         {
         Write-Verbose $Uri
@@ -223,7 +208,3 @@ function Set-ECSvdc
 
     }
 }
-
-
-
-

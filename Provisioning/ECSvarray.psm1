@@ -1,5 +1,4 @@
-﻿# from /vdc/data-services/varrays
-function Get-ECSvarrays
+﻿function Get-ECSvarrays
 {
     [CmdletBinding(DefaultParameterSetName = '0')]
     Param
@@ -35,8 +34,6 @@ function Get-ECSvarrays
 
     }
 }
-
-# from /vdc/data-services/varrays
 function Get-ECSvarray
 {
     [CmdletBinding(DefaultParameterSetName = '0')]
@@ -75,16 +72,6 @@ function Get-ECSvarray
 
     }
 }
-<#
-from JSON
-{
-  "name": "",
-  "isProtected": "",
-  "description": ""
-}
-
-#>
-
 function New-ECSvarray
 {
     [CmdletBinding(DefaultParameterSetName = '0')]
