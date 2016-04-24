@@ -11,7 +11,6 @@
 function Connect-ECSSystem
 {
     [CmdletBinding()]
-    [OutputType([int])]
     Param
     (
         # Param1 help description
