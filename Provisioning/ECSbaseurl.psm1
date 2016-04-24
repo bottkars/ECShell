@@ -38,7 +38,7 @@ function Get-ECSbaseurldetail
     Param
     (
         [Parameter(Mandatory=$true,ValueFromPipelineByPropertyName=$true,ParameterSetName='1')]
-        [alias('id')][string]$BaseURL
+        [alias('id')][string]$BaseURLID
     )
     Begin
     {
@@ -50,11 +50,11 @@ function Get-ECSbaseurldetail
     }
     Process
     {
-    $Uri = "$ECSbaseurl/$class/$BaseURL"
+    $Uri = "$ECSbaseurl/$class/$BaseURLID"
     try
         {
         Write-Verbose $Uri
-        (Invoke-RestMethod -Uri $Uri -Headers $ECSAuthHeaders -Method Get -ContentType $ContentType ) | Select-Object -ExpandProperty $Expandproperty
+        Invoke-RestMethod -Uri $Uri -Headers $ECSAuthHeaders -Method Get -ContentType $ContentType | Select-Object -ExpandProperty $Expandproperty
         }
     catch
         {
@@ -114,4 +114,92 @@ function New-ECSbaseurl
     }
 }
 
+#POST https://192.168.0.0:4443/object/baseurl/urn:storageos:ObjectBaseUrl:d7bf4302-403c-4308-a8d7-073cbb38fbeb:/deactivate HTTP/1.1
 
+function Remove-ECSbaseurl
+{
+    [CmdletBinding(DefaultParameterSetName = '0')]
+    Param
+    (
+        [Parameter(Mandatory=$true,ValueFromPipelineByPropertyName=$true,ParameterSetName='1')]
+        [alias('id')][string]$BaseURL
+    )
+    Begin
+    {
+    $Myself = $MyInvocation.MyCommand.Name.Substring(7)
+    $class = "object/baseurl"
+    #$Excludeproperties = ('link','name','id')
+    $Expandproperty = "base_url"
+    $ContentType = "application/json"
+    $Method = "Post"
+    }
+    Process
+    {
+    $Uri = "$ECSbaseurl/$class/$($BaseURL)/deactivate"
+    try
+        {
+        Write-Verbose $Uri
+        Invoke-RestMethod -Uri $Uri -Headers $ECSAuthHeaders -Method $Method -ContentType $ContentType #| Select-Object -ExpandProperty $Expandproperty
+        }
+    catch
+        {
+        Get-ECSWebException -ExceptionMessage $_
+        break
+        }
+    Write-Host -ForegroundColor White "$BaseURL has been removed"
+    }
+    End
+    {
+
+    }
+}
+
+function Set-ECSbaseurl
+{
+    [CmdletBinding(DefaultParameterSetName = '0')]
+    Param
+    (
+        [Parameter(Mandatory=$true,ValueFromPipelineByPropertyName=$true,ParameterSetName='1')]
+        [alias('name')][string]$urlname,
+        [Parameter(Mandatory=$true,ValueFromPipelineByPropertyName=$true,ParameterSetName='1')]
+        [alias('url')][string]$baseurl,
+        [Parameter(Mandatory=$true,ValueFromPipelineByPropertyName=$true,ParameterSetName='1')]
+        [alias('urlid')][string]$ID,
+        [Parameter(Mandatory=$false,ValueFromPipelineByPropertyName=$true,ParameterSetName='1')]
+        [switch]$is_namespace_in_host
+    )
+    Begin
+    {
+    $Myself = $MyInvocation.MyCommand.Name.Substring(7)
+    $class = "object/baseurl"
+    #$Excludeproperties = ('link','name','id')
+    $Expandproperty = "base_url"
+    $ContentType = "application/json"
+    $Method = "Put"
+    }
+    Process
+    {
+    $Uri = "$ECSbaseurl/$class/$ID"
+        $JSonBody = [ordered]@{ 
+	is_namespace_in_host = $is_namespace_in_host.IsPresent
+	name = $urlname 
+	base_url = $baseurl } | ConvertTo-Json 
+
+    
+    try
+        {
+        Write-Verbose $Uri
+        Invoke-RestMethod -Uri $Uri -Headers $ECSAuthHeaders -Method $Method -Body $JSonBody -ContentType $ContentType #| Select-Object -ExpandProperty $Expandproperty
+        }
+    catch
+        {
+        Get-ECSWebException -ExceptionMessage $_
+        break
+        }
+    Get-ECSbaseurldetail -BaseURLID $ID
+    }
+    End
+    {
+
+    }
+}
