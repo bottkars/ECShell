@@ -47,17 +47,10 @@ function Connect-ECSSystem
         {
         $Headers = Invoke-WebRequest -Uri "$ECSbaseurl/login" -Method Get -Credential $Credentials -ContentType "application/json"
         }
-    catch [System.Net.WebException]
-        {
-        Write-Warning $_.Exception.Message
-        # Get-ECSWebException -ExceptionMessage 
-        Break
-        }
     catch
         {
-        Write-Verbose $_
-        Write-Warning $_.Exception.Message
-        break
+        Get-ECSWebException -ExceptionMessage $_
+        Break
         }
         #>
         $auth = [System.Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes(':'+$Token))
@@ -103,8 +96,8 @@ function Get-ECSproperties
         }
     catch
         {
-        #Get-ECSWebException -ExceptionMessage 
-        $_.Exception.Message
+        Get-ECSWebException -ExceptionMessage $_ 
+        #$_.Exception.Message
         break
         }
     }
@@ -157,8 +150,7 @@ function Get-ECSbaseurl
         }
     catch
         {
-        #Get-ECSWebException -ExceptionMessage 
-        $_.Exception.Message
+        Get-ECSWebException -ExceptionMessage $_
         break
         }
     }
@@ -192,8 +184,7 @@ function Get-ECSnamespaces
         }
     catch
         {
-        #Get-ECSWebException -ExceptionMessage 
-        $_.Exception.Message
+        Get-ECSWebException -ExceptionMessage $_
         break
         }
     }
@@ -227,8 +218,8 @@ process
 try
     {
     Write-Verbose "$Global:ECSbaseurl/users/whoami"
-    (Invoke-RestMethod -Uri "$Global:ECSbaseurl/user/whoami" -Headers $Global:ECSAuthHeaders -ContentType $ContentType).childnodes[1]  | Select-Object -Property $IncludeProperty  -ExpandProperty roles     }catch    {    #Get-ECSWebException -ExceptionMessage 
-    $_.Exception.Message    }
+    (Invoke-RestMethod -Uri "$Global:ECSbaseurl/user/whoami" -Headers $Global:ECSAuthHeaders -ContentType $ContentType).childnodes[1]  | Select-Object -Property $IncludeProperty  -ExpandProperty roles     }catch    {    Get-ECSWebException -ExceptionMessage $_ 
+    #$_.Exception.Message    }
 }
 end{}
 }
