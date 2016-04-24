@@ -31,7 +31,6 @@
 
     }
 }
-
 function Get-ECSbaseurldetail
 {
     [CmdletBinding(DefaultParameterSetName = '0')]
@@ -67,7 +66,6 @@ function Get-ECSbaseurldetail
 
     }
 }
-
 function New-ECSbaseurl
 {
     [CmdletBinding(DefaultParameterSetName = '0')]
@@ -113,9 +111,6 @@ function New-ECSbaseurl
 
     }
 }
-
-#POST https://192.168.0.0:4443/object/baseurl/urn:storageos:ObjectBaseUrl:d7bf4302-403c-4308-a8d7-073cbb38fbeb:/deactivate HTTP/1.1
-
 function Remove-ECSbaseurl
 {
     [CmdletBinding(DefaultParameterSetName = '0')]
@@ -153,7 +148,6 @@ function Remove-ECSbaseurl
 
     }
 }
-
 function Set-ECSbaseurl
 {
     [CmdletBinding(DefaultParameterSetName = '0')]
