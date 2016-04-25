@@ -12,7 +12,7 @@ function Get-ECSLocalzoneDashboard
     $Myself = $MyInvocation.MyCommand.Name.Substring(7)
     $class = "dashboard/zones/localzone"
     $Expandproperty = "alert"
-    $Excludeproperty = "_links"
+    $Excludeproperty = ('_links','id')
     $ContentType = "application/json"
     $Method = "Get"
     }
@@ -24,7 +24,15 @@ function Get-ECSLocalzoneDashboard
         Write-Verbose $Uri
         if ($type)
             {
-            Invoke-RestMethod -Uri $Uri -Headers $ECSAuthHeaders -Method $Method -ContentType $ContentType  | Select-Object  -ExpandProperty _embedded | Select-Object -ExpandProperty _instances  | Select-Object * -ExcludeProperty $Excludeproperty
+            if ($type -match "rglink")
+                {
+                $elementname = "rglink"
+                }
+            else
+                {
+                $elementname = $type -replace ".$"
+                }
+            Invoke-RestMethod -Uri $Uri -Headers $ECSAuthHeaders -Method $Method -ContentType $ContentType  | Select-Object  -ExpandProperty _embedded | Select-Object -ExpandProperty _instances  | Select-Object @{N="$($elementname)id";E={$_.id}},* -ExcludeProperty $Excludeproperty
             }
         else 
             {
@@ -59,7 +67,7 @@ function Get-ECSNodeDashboard
     $Myself = $MyInvocation.MyCommand.Name.Substring(7)
     $class = "dashboard/nodes"
     $Expandproperty = "_embedded._instances"
-    $Excludeproperty = "_links"
+    $Excludeproperty = ('_links','id')
     $ContentType = "application/json"
     $Method = "Get"
     }
@@ -71,7 +79,8 @@ function Get-ECSNodeDashboard
         Write-Verbose $Uri
         if ($type)
             {
-            Invoke-RestMethod -Uri $Uri -Headers $ECSAuthHeaders -Method $Method -ContentType $ContentType  | Select-Object  -ExpandProperty _embedded | Select-Object -ExpandProperty _instances  | Select-Object * -ExcludeProperty $Excludeproperty
+            $elementname = $type -replace ".$"
+            Invoke-RestMethod -Uri $Uri -Headers $ECSAuthHeaders -Method $Method -ContentType $ContentType  | Select-Object  -ExpandProperty _embedded | Select-Object -ExpandProperty _instances  | Select-Object @{N="$($elementname)id";E={$_.id}},* -ExcludeProperty $Excludeproperty
             }
         else
             {
@@ -105,7 +114,7 @@ function Get-ECSDiskDashboard
     $Myself = $MyInvocation.MyCommand.Name.Substring(7)
     $class = "dashboard/disks"
     $Expandproperty = "_embedded._instances"
-    $Excludeproperty = "_links"
+    $Excludeproperty = ('_links','id')
     $ContentType = "application/json"
     $Method = "Get"
     }
@@ -135,16 +144,14 @@ function Get-ECSProcessDashboard
     Param
     (
         [Parameter(Mandatory=$false,ValueFromPipelineByPropertyName=$true,ParameterSetName='1')]
-        [Alias("did")]$ProcessID
-
-
+        [Alias("id")]$ProcessID
     )
     Begin
     {
     $Myself = $MyInvocation.MyCommand.Name.Substring(7)
     $class = "dashboard/processes"
     $Expandproperty = "_embedded._instances"
-    $Excludeproperty = "_links"
+    $Excludeproperty = ('_links','id')
     $ContentType = "application/json"
     $Method = "Get"
     }
@@ -154,7 +161,8 @@ function Get-ECSProcessDashboard
     try
         {
         Write-Verbose $Uri
-        Invoke-RestMethod -Uri $Uri -Headers $ECSAuthHeaders -Method $Method -ContentType $ContentType  | Select-Object *  -ExcludeProperty $Excludeproperty
+        $elementname = "process"
+        Invoke-RestMethod -Uri $Uri -Headers $ECSAuthHeaders -Method $Method -ContentType $ContentType  | Select-Object @{N="$($elementname)id";E={$_.id}},* -ExcludeProperty $Excludeproperty
         }
     catch
         {
@@ -174,14 +182,15 @@ function Get-ECSStoragePoolsDashboard
     Param
     (
         [Parameter(Mandatory=$true,ValueFromPipelineByPropertyName=$true,ParameterSetName='1')]
-        [Alias("spid")]$StoragePoolID
+        [Alias("id")]$StoragePoolID
     )
     Begin
     {
     $Myself = $MyInvocation.MyCommand.Name.Substring(7)
     $class = "dashboard/storagepools"
     $Expandproperty = "_embedded._instances"
-    $Excludeproperty = "_links"
+    $elementname = "storagepoolid"
+    $Excludeproperty = ('_links','id')
     $ContentType = "application/json"
     $Method = "Get"
     }
@@ -191,7 +200,7 @@ function Get-ECSStoragePoolsDashboard
     try
         {
         Write-Verbose $Uri
-        Invoke-RestMethod -Uri $Uri -Headers $ECSAuthHeaders -Method $Method -ContentType $ContentType  | Select-Object *  -ExcludeProperty $Excludeproperty
+        Invoke-RestMethod -Uri $Uri -Headers $ECSAuthHeaders -Method $Method -ContentType $ContentType  | Select-Object @{N="$($elementname)id";E={$_.id}},*  -ExcludeProperty $Excludeproperty
         }
     catch
         {
@@ -222,7 +231,7 @@ function Get-ECSReplicationGroupsDashboard
     $Myself = $MyInvocation.MyCommand.Name.Substring(7)
     $class = "dashboard/replicationgroups"
     $Expandproperty = "_embedded._instances"
-    $Excludeproperty = "_links"
+    $Excludeproperty = ('_links','id')
     $ContentType = "application/json"
     $Method = "Get"
     }
@@ -234,10 +243,12 @@ function Get-ECSReplicationGroupsDashboard
         Write-Verbose $Uri
         if ($type)
             {
-            Invoke-RestMethod -Uri $Uri -Headers $ECSAuthHeaders -Method $Method -ContentType $ContentType  | Select-Object  -ExpandProperty _embedded | Select-Object -ExpandProperty _instances  | Select-Object * -ExcludeProperty $Excludeproperty
+            $elementname = $type -replace ".$"
+            Invoke-RestMethod -Uri $Uri -Headers $ECSAuthHeaders -Method $Method -ContentType $ContentType  | Select-Object  -ExpandProperty _embedded | Select-Object -ExpandProperty _instances  | Select-Object @{N="$($elementname)id";E={$_.id}},* -ExcludeProperty $Excludeproperty
             }
         else
             {
+            $elementname = "replicationgroupid"
             Invoke-RestMethod -Uri $Uri -Headers $ECSAuthHeaders -Method $Method -ContentType $ContentType  #| Select-Object  -ExpandProperty _embedded | Select-Object -ExpandProperty _instances 
             }
         #Invoke-RestMethod -Uri $Uri -Headers $ECSAuthHeaders -Method $Method -ContentType $ContentType  | Select-Object *  -ExcludeProperty $Excludeproperty
@@ -268,9 +279,10 @@ function Get-ECSReplicationGroupLinksDashboard
     $Myself = $MyInvocation.MyCommand.Name.Substring(7)
     $class = "dashboard/rglinks"
     $Expandproperty = "_embedded._instances"
-    $Excludeproperty = "_links"
+    $Excludeproperty = ('_links','id')
     $ContentType = "application/json"
     $Method = "Get"
+    $elementname = "rglinkid"
     }
     Process
     {
@@ -286,7 +298,7 @@ function Get-ECSReplicationGroupLinksDashboard
             {
             Invoke-RestMethod -Uri $Uri -Headers $ECSAuthHeaders -Method $Method -ContentType $ContentType  #| Select-Object  -ExpandProperty _embedded | Select-Object -ExpandProperty _instances 
             }#>
-        Invoke-RestMethod -Uri $Uri -Headers $ECSAuthHeaders -Method $Method -ContentType $ContentType  | Select-Object *  -ExcludeProperty $Excludeproperty
+        Invoke-RestMethod -Uri $Uri -Headers $ECSAuthHeaders -Method $Method -ContentType $ContentType  | Select-Object @{N="$($elementname)id";E={$_.id}},*  -ExcludeProperty $Excludeproperty
         }
     catch
         {
