@@ -147,7 +147,7 @@ function Get-ECSnamespaces
     try
         {
         Write-Verbose $Uri
-        (Invoke-RestMethod -Uri $Uri -Headers $ECSAuthHeaders -Method Get  -ContentType $ContentType ) | Select-Object -ExpandProperty $Expandproperty -ExcludeProperty $Excludeproperties
+        (Invoke-RestMethod -Uri $Uri -Headers $ECSAuthHeaders -Method Get  -ContentType $ContentType ) | Select-Object -ExpandProperty $Expandproperty -ExcludeProperty $Excludeproperties | Select-Object @{N="Namespace";E={$_.id}},name
         # @{N="$($Myself)ID";E={$_.id}},* 
         }
     catch

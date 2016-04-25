@@ -3,7 +3,7 @@
     [CmdletBinding(DefaultParameterSetName = '1')]
     Param
     (
-        [Parameter(Mandatory=$true,ValueFromPipelineByPropertyName=$false,ParameterSetName='1')]
+        [Parameter(Mandatory=$true,ValueFromPipelineByPropertyName=$true,ParameterSetName='1')]
         $Namespace
     )
     Begin
@@ -14,18 +14,21 @@
     $Expandproperty = "object_bucket"
     $ContentType = "application/json"
     $Uri = "$ECSbaseurl/object/bucket.json"
+    $method = "Get"
     }
     Process
     {
     
-    $Body = @{  
-    namespace = "$namespace"
-    }  
-    $JSonBody = ConvertTo-Json $Body
+    #$JsonBody = @{ namespace = "$namespace" } | ConvertTo-Json 
+    $Uri = "$ECSbaseurl/object/bucket.json?namespace=$Namespace"
+    if ($PSCmdlet.MyInvocation.BoundParameters["verbose"].IsPresent)
+            {
+            Write-Host -ForegroundColor Yellow "Calling $uri with Method $method"
+            }
     try
         {
         Write-Verbose $Uri
-        $objectBucket = Invoke-RestMethod -Uri $Uri -Headers $ECSAuthHeaders -Method Get -Body $Body -ContentType $ContentType  | Select-Object  -ExpandProperty $Expandproperty
+        Invoke-RestMethod -Uri $Uri -Headers $ECSAuthHeaders -Method $method -Body $JsonBody -ContentType $ContentType  | Select-Object  -ExpandProperty $Expandproperty | Select-Object @{N="Bucketname";E={$_.name}},* -ExcludeProperty $Excludeproperty
         }
     catch
         {
@@ -33,7 +36,7 @@
         #$_.Exception.Message
         break
         }
-    $objectBucket | Select-Object @{N="Bucketname";E={$_.name}},* -ExcludeProperty $Excludeproperty
+    #$objectBucket | Select-Object @{N="Bucketname";E={$_.name}},* -ExcludeProperty $Excludeproperty
     }
     End
     {
