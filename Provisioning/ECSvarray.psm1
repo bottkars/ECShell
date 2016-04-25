@@ -1,4 +1,4 @@
-﻿function Get-ECSvarrays
+﻿function Get-ECSStoragepools
 {
     [CmdletBinding(DefaultParameterSetName = '0')]
     Param
@@ -34,7 +34,7 @@
 
     }
 }
-function Get-ECSvarray
+function Get-ECSStoragepool
 {
     [CmdletBinding(DefaultParameterSetName = '0')]
     Param
@@ -72,7 +72,7 @@ function Get-ECSvarray
 
     }
 }
-function New-ECSvarray
+function New-ECSStoragepool
 {
     [CmdletBinding(DefaultParameterSetName = '0')]
     Param
