@@ -5,7 +5,7 @@ function Get-ECSLocalzoneDashboard
     Param
     (
         [Parameter(Mandatory=$false,ValueFromPipelineByPropertyName=$true,ParameterSetName='1')]
-        [Alias("name")][ValidateSet('storagepools','nodes')]$type
+        [Alias("name")][ValidateSet('storagepools','nodes','replicationgroups','rglinksFailed','rglinksBootstrap')]$type
     )
     Begin
     {
@@ -42,24 +42,34 @@ function Get-ECSNodeDashboard
     Param
     (
         [Parameter(Mandatory=$false,ValueFromPipelineByPropertyName=$true,ParameterSetName='1')]
-        [Alias("Node")]$Nodeid
+        [Alias("Node")]$Nodeid,
+        [Parameter(Mandatory=$false,ValueFromPipelineByPropertyName=$true,ParameterSetName='1')]
+        [Alias("name")][ValidateSet('disks','processes')]$type
+
     )
     Begin
     {
     $Myself = $MyInvocation.MyCommand.Name.Substring(7)
     $class = "dashboard/nodes"
-    $Expandproperty = "alert"
+    $Expandproperty = "_embedded._instances"
     $Excludeproperty = "id"
     $ContentType = "application/json"
     $Method = "Get"
     }
     Process
     {
-    $Uri = "$ECSbaseurl/$class/$Nodeid"
+    $Uri = "$ECSbaseurl/$class/$Nodeid/$type"
     try
         {
         Write-Verbose $Uri
-        Invoke-RestMethod -Uri $Uri -Headers $ECSAuthHeaders -Method $Method -ContentType $ContentType  # | Select-Object  -ExpandProperty $Expandproperty 
+        if ($type)
+            {
+            Invoke-RestMethod -Uri $Uri -Headers $ECSAuthHeaders -Method $Method -ContentType $ContentType  | Select-Object  -ExpandProperty _embedded | Select-Object -ExpandProperty _instances 
+            }
+        else
+            {
+            Invoke-RestMethod -Uri $Uri -Headers $ECSAuthHeaders -Method $Method -ContentType $ContentType  #| Select-Object  -ExpandProperty _embedded | Select-Object -ExpandProperty _instances 
+            }
         }
     catch
         {
@@ -74,7 +84,7 @@ function Get-ECSNodeDashboard
     }
 }
 
-#GET /dashboard/nodes/{id}/disks
+<#GET /dashboard/nodes/{id}/disks
 function Get-ECSNodeDiskDashboard
 {
     [CmdletBinding(DefaultParameterSetName = '1')]
@@ -87,7 +97,7 @@ function Get-ECSNodeDiskDashboard
     {
     $Myself = $MyInvocation.MyCommand.Name.Substring(7)
     $class = "dashboard/nodes"
-    $Expandproperty = "alert"
+    $Expandproperty = "title"
     $Excludeproperty = "id"
     $ContentType = "application/json"
     $Method = "Get"
@@ -98,7 +108,7 @@ function Get-ECSNodeDiskDashboard
     try
         {
         Write-Verbose $Uri
-        Invoke-RestMethod -Uri $Uri -Headers $ECSAuthHeaders -Method $Method -ContentType $ContentType  # | Select-Object  -ExpandProperty $Expandproperty 
+        Invoke-RestMethod -Uri $Uri -Headers $ECSAuthHeaders -Method $Method -ContentType $ContentType # | Select-Object  -ExpandProperty $Expandproperty 
         }
     catch
         {
@@ -112,3 +122,5 @@ function Get-ECSNodeDiskDashboard
 
     }
 }
+
+#GET /dashboard/zones/localzone/storagepools#>
