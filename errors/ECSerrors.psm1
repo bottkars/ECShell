@@ -11,14 +11,14 @@ Function Get-ECSWebException
         
         switch -Wildcard ($ExceptionMessage.FullyQualifiedErrorId)
             {
-            "*System.UriFormatException,Microsoft.PowerShell.Commands.InvokeRestMethodCommand*"
+            "*System.UriFormatException,Microsoft.PowerShell.Commands.Invoke*Command*"
                 {
                 Write-Host -ForegroundColor Magenta "$($ExceptionMessage.Exception.Message)"
                 write-Host "Most likely you are not connected to the ECS System"
                 write-Host "please use Connect-ECSSystem to connect and login to ECS"
                 }
             
-            "*WebCmdletWebResponseException,Microsoft.PowerShell.Commands.InvokeRestMethodCommand*"
+            "*WebCmdletWebResponseException,Microsoft.PowerShell.Commands.Invoke*Command*"
                  {
                 switch -Wildcard ($ExceptionMessage.Exception)
                     {
