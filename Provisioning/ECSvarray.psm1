@@ -1,4 +1,4 @@
-﻿function Get-ECSStoragepools
+﻿<#function Get-ECSStoragepools
 {
     [CmdletBinding(DefaultParameterSetName = '0')]
     Param
@@ -33,10 +33,10 @@
     {
 
     }
-}
+}#>
 function Get-ECSStoragepool
 {
-    [CmdletBinding(DefaultParameterSetName = '1')]
+    [CmdletBinding(DefaultParameterSetName = '0')]
     Param
     (
         [Parameter(Mandatory=$true,ValueFromPipelineByPropertyName=$true,ParameterSetName='1')]
@@ -57,8 +57,15 @@ function Get-ECSStoragepool
     Write-Verbose $Uri
     try
         {
-        Write-Verbose $Uri
-        (Invoke-RestMethod -Uri $Uri -Headers $ECSAuthHeaders -Method Get -ContentType $ContentType ) | Select-Object  @{N="StoragePoolID";E={$_.id}},* -ExcludeProperty $Excludeproperty
+        if ($storagePoolID)
+            {
+            Write-Verbose $Uri
+            Invoke-RestMethod -Uri $Uri -Headers $ECSAuthHeaders -Method Get -ContentType $ContentType | Select-Object  @{N="StoragePoolID";E={$_.id}},* -ExcludeProperty $Excludeproperty
+            }
+        else
+            {
+            Invoke-RestMethod -Uri $Uri -Headers $ECSAuthHeaders -Method Get -ContentType $ContentType | Select-Object  -ExpandProperty $Expandproperty | Select-Object @{N="StoragePoolID";E={$_.id}},* -ExcludeProperty $Excludeproperty
+            }
         }
     catch
         {
