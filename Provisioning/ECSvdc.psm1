@@ -34,7 +34,7 @@
 
     }
 }
-function Get-ECSvdcs
+<#function Get-ECSvdcs
 {
     [CmdletBinding(DefaultParameterSetName = '0')]
     Param
@@ -69,7 +69,7 @@ function Get-ECSvdcs
     {
 
     }
-}
+}#>
 function Get-ECSlocalvdcSecretKey
 {
     [CmdletBinding(DefaultParameterSetName = '0')]
