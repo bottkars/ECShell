@@ -36,7 +36,7 @@ function Get-ECSLocalzoneDashboard
 
     }
 }
-function Get-ECSNodeDiskDashboard
+function Get-ECSNodeDashboard
 {
     [CmdletBinding(DefaultParameterSetName = '1')]
     Param
@@ -75,7 +75,7 @@ function Get-ECSNodeDiskDashboard
 }
 
 #GET /dashboard/nodes/{id}/disks
-function Get-ECSNodeDashboard
+function Get-ECSNodeDiskDashboard
 {
     [CmdletBinding(DefaultParameterSetName = '1')]
     Param
