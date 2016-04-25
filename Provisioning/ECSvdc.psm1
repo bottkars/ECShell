@@ -108,7 +108,7 @@ function Get-ECSlocalvdcSecretKey
 }
 function Get-ECSvdc
 {
-    [CmdletBinding(DefaultParameterSetName = '1')]
+    [CmdletBinding(DefaultParameterSetName = '0')]
     Param
     (
         [Parameter(Mandatory=$true,ValueFromPipelineByPropertyName=$true,ParameterSetName='1')]
@@ -122,7 +122,7 @@ function Get-ECSvdc
     $Myself = $MyInvocation.MyCommand.Name.Substring(7)
     $class = "object/vdcs/vdc/local"
     $Expandproperty = "varray"
-    $Excludeproperty = "id"
+    $Excludeproperty = ('id','link')
     $ContentType = "application/json"
     $Method = "Get"
     }
@@ -130,21 +130,37 @@ function Get-ECSvdc
     {
     switch ($PsCmdlet.ParameterSetName)
         {
+        0
+            {
+            $Uri = "$ECSbaseurl/object/vdcs/vdc/list"
+            $Expandproperty = "vdc_list"
+            $selectproperty = "none"
+            }
         1
             {
             $Uri = "$ECSbaseurl/object/vdcs/vdc/$vdcName.json"
+            $Expandproperty = ""
+            #$selectproperty = ('@{N="VDCID";E={$_.id}}','*')
             }
         2
             {
             $Uri = "$ECSbaseurl/object/vdcs/vdcid/$vdcID.json"
+            $Expandproperty = ""
+            #$selectproperty = ('@{N="VDCID";E={$_.id}}','*')
             }
         }
 
     try
         {
         Write-Verbose $Uri
-        Invoke-RestMethod -Uri $Uri -Headers $ECSAuthHeaders -Method $Method -ContentType $ContentType #| Select-Object  -ExpandProperty $Expandproperty 
-        
+        if ($selectproperty -eq "none")
+            {
+            Invoke-RestMethod -Uri $Uri -Headers $ECSAuthHeaders -Method $Method -ContentType $ContentType  | Select-Object -ExpandProperty $Expandproperty | Select-Object -ExpandProperty vdc -ExcludeProperty $Excludeproperty
+            }
+        else
+            {
+            Invoke-RestMethod -Uri $Uri -Headers $ECSAuthHeaders -Method $Method -ContentType $ContentType  | Select-Object * -ExcludeProperty $Excludeproperty
+            }
         }
     catch
         {
