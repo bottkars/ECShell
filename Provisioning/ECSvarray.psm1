@@ -36,7 +36,7 @@
 }
 function Get-ECSStoragepool
 {
-    [CmdletBinding(DefaultParameterSetName = '0')]
+    [CmdletBinding(DefaultParameterSetName = '1')]
     Param
     (
         [Parameter(Mandatory=$true,ValueFromPipelineByPropertyName=$true,ParameterSetName='1')]
