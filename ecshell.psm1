@@ -20,10 +20,10 @@ function Connect-ECSSystem
         $ECSIP = "192.168.2.193",
         $ECSPort = 4443,
         #[Parameter(Mandatory=$true)]$user = "root",
-        [Parameter(Mandatory=$true,
+        [Parameter(Mandatory=$false,
                    ValueFromPipeline=$true,
                    Position=0)][pscredential]$Credentials,
-        [switch]$trustCert = $true
+        [switch]$trustCert
     )
 
     Begin
