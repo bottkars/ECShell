@@ -9,7 +9,7 @@ dowload and load the modules file in Powershell
 
 load the modules with 
 ```Powershell
-ipmo .\ECShell
+import-module .\ECShell
 ```
 to connect to a EMC ECS System, simply use:
 connect-ECSSystem
