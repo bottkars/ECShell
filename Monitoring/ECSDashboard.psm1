@@ -18,7 +18,7 @@ function Get-ECSLocalzoneDashboard
     }
     Process
     {
-    $Uri = "$ECSbaseurl/$class/$type.json"
+    $Uri = "$ECSbaseurl/$($class)?dataType=current"
     try
         {
         Write-Verbose $Uri
@@ -55,7 +55,7 @@ function Get-ECSNodeDashboard
     }
     Process
     {
-    $Uri = "$ECSbaseurl/$class/$Nodeid.json"
+    $Uri = "$ECSbaseurl/$class/$Nodeid"
     try
         {
         Write-Verbose $Uri
