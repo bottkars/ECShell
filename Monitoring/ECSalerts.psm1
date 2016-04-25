@@ -63,7 +63,7 @@ function Get-ECSauditevents
     }
     Process
     {
-    $Uri = "$ECSbaseurl/$class.json?namespace=$Namespace&limit=$limit&start_time=$starttime"
+    $Uri = "$ECSbaseurl/$class.json?namespace=$Namespace&limit=$limit"# &start_time=$starttime"
     try
         {
         Write-Verbose $Uri
