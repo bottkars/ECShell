@@ -769,8 +769,8 @@ function Get-ECSBucketACL
     [CmdletBinding(DefaultParameterSetName = '1')]
     Param
     (
-        [Parameter(Mandatory=$true,ValueFromPipelineByPropertyName=$false,ParameterSetName='1')]
-        $Bucketname,
+        [Parameter(Mandatory=$true,ValueFromPipelineByPropertyName=$true,ParameterSetName='1')]
+        [alias('name')]$Bucketname,
         [Parameter(Mandatory=$true,ValueFromPipelineByPropertyName=$true,ParameterSetName='1')]
         [alias('ns')][string]$Namespace
     )
@@ -781,13 +781,14 @@ function Get-ECSBucketACL
     $Excludeproperty = "name"
     $Expandproperty = "object_bucket"
     $ContentType = "application/json"
-    $Uri = "$ECSbaseurl/object/bucket/$BucketName/acl.json?namespace=$Namespace"
     $method = "Get"
     }
     Process
     {
+    $Uri = "$ECSbaseurl/object/bucket/$BucketName/acl.json?namespace=$Namespace"
     try
-        {
+        {    
+
         Write-Verbose $Uri
         Invoke-RestMethod -Uri $Uri -Headers $ECSAuthHeaders -Method $method -ContentType $ContentType | Select-Object namespace -ExpandProperty ACL
         }
