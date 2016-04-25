@@ -89,7 +89,7 @@ function Get-ECSDiskDashboard
     Param
     (
         [Parameter(Mandatory=$false,ValueFromPipelineByPropertyName=$true,ParameterSetName='1')]
-        [Alias("did")]$Diskid
+        [Alias("id")]$Diskid
 
 
     )
