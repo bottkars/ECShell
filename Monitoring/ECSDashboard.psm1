@@ -41,7 +41,7 @@ function Get-ECSNodeDashboard
     [CmdletBinding(DefaultParameterSetName = '1')]
     Param
     (
-        [Parameter(Mandatory=$false,ValueFromPipelineByPropertyName=$true,ParameterSetName='1')]
+        [Parameter(Mandatory=$true,ValueFromPipelineByPropertyName=$true,ParameterSetName='1')]
         [Alias("Node")]$Nodeid,
         [Parameter(Mandatory=$false,ValueFromPipelineByPropertyName=$true,ParameterSetName='1')]
         [Alias("name")][ValidateSet('disks','processes')]$type
@@ -52,7 +52,7 @@ function Get-ECSNodeDashboard
     $Myself = $MyInvocation.MyCommand.Name.Substring(7)
     $class = "dashboard/nodes"
     $Expandproperty = "_embedded._instances"
-    $Excludeproperty = "id"
+    $Excludeproperty = "_links"
     $ContentType = "application/json"
     $Method = "Get"
     }
@@ -64,7 +64,7 @@ function Get-ECSNodeDashboard
         Write-Verbose $Uri
         if ($type)
             {
-            Invoke-RestMethod -Uri $Uri -Headers $ECSAuthHeaders -Method $Method -ContentType $ContentType  | Select-Object  -ExpandProperty _embedded | Select-Object -ExpandProperty _instances 
+            Invoke-RestMethod -Uri $Uri -Headers $ECSAuthHeaders -Method $Method -ContentType $ContentType  | Select-Object  -ExpandProperty _embedded | Select-Object -ExpandProperty _instances  | Select-Object * -ExcludeProperty $Excludeproperty
             }
         else
             {
@@ -83,32 +83,32 @@ function Get-ECSNodeDashboard
 
     }
 }
-
-<#GET /dashboard/nodes/{id}/disks
-function Get-ECSNodeDiskDashboard
+function Get-ECSDiskDashboard
 {
     [CmdletBinding(DefaultParameterSetName = '1')]
     Param
     (
         [Parameter(Mandatory=$false,ValueFromPipelineByPropertyName=$true,ParameterSetName='1')]
-        [Alias("Node")]$Nodeid
+        [Alias("did")]$Diskid
+
+
     )
     Begin
     {
     $Myself = $MyInvocation.MyCommand.Name.Substring(7)
-    $class = "dashboard/nodes"
-    $Expandproperty = "title"
-    $Excludeproperty = "id"
+    $class = "dashboard/disks"
+    $Expandproperty = "_embedded._instances"
+    $Excludeproperty = "_links"
     $ContentType = "application/json"
     $Method = "Get"
     }
     Process
     {
-    $Uri = "$ECSbaseurl/$class/$Nodeid/disks?dataType=current"
+    $Uri = "$ECSbaseurl/$class/$Diskid"
     try
         {
         Write-Verbose $Uri
-        Invoke-RestMethod -Uri $Uri -Headers $ECSAuthHeaders -Method $Method -ContentType $ContentType # | Select-Object  -ExpandProperty $Expandproperty 
+        Invoke-RestMethod -Uri $Uri -Headers $ECSAuthHeaders -Method $Method -ContentType $ContentType  | Select-Object *  -ExcludeProperty $Excludeproperty
         }
     catch
         {
@@ -122,5 +122,79 @@ function Get-ECSNodeDiskDashboard
 
     }
 }
+function Get-ECSProcessDashboard
+{
+    [CmdletBinding(DefaultParameterSetName = '1')]
+    Param
+    (
+        [Parameter(Mandatory=$false,ValueFromPipelineByPropertyName=$true,ParameterSetName='1')]
+        [Alias("did")]$ProcessID
 
-#GET /dashboard/zones/localzone/storagepools#>
+
+    )
+    Begin
+    {
+    $Myself = $MyInvocation.MyCommand.Name.Substring(7)
+    $class = "dashboard/processes"
+    $Expandproperty = "_embedded._instances"
+    $Excludeproperty = "_links"
+    $ContentType = "application/json"
+    $Method = "Get"
+    }
+    Process
+    {
+    $Uri = "$ECSbaseurl/$class/$ProcessID"
+    try
+        {
+        Write-Verbose $Uri
+        Invoke-RestMethod -Uri $Uri -Headers $ECSAuthHeaders -Method $Method -ContentType $ContentType  | Select-Object *  -ExcludeProperty $Excludeproperty
+        }
+    catch
+        {
+        Get-ECSWebException -ExceptionMessage $_
+        #$_.Exception.Message
+        break
+        }
+    }
+    End
+    {
+
+    }
+}
+function Get-ECSStoragePoolsDashboard
+{
+    [CmdletBinding(DefaultParameterSetName = '1')]
+    Param
+    (
+        [Parameter(Mandatory=$true,ValueFromPipelineByPropertyName=$true,ParameterSetName='1')]
+        [Alias("spid")]$StoragePoolID
+    )
+    Begin
+    {
+    $Myself = $MyInvocation.MyCommand.Name.Substring(7)
+    $class = "dashboard/storagepools"
+    $Expandproperty = "_embedded._instances"
+    $Excludeproperty = "_links"
+    $ContentType = "application/json"
+    $Method = "Get"
+    }
+    Process
+    {
+    $Uri = "$ECSbaseurl/$class/$StoragePoolID"
+    try
+        {
+        Write-Verbose $Uri
+        Invoke-RestMethod -Uri $Uri -Headers $ECSAuthHeaders -Method $Method -ContentType $ContentType  | Select-Object *  -ExcludeProperty $Excludeproperty
+        }
+    catch
+        {
+        Get-ECSWebException -ExceptionMessage $_
+        #$_.Exception.Message
+        break
+        }
+    }
+    End
+    {
+
+    }
+}
