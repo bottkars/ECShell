@@ -58,7 +58,7 @@ function Get-ECSStoragepool
     try
         {
         Write-Verbose $Uri
-        (Invoke-RestMethod -Uri $Uri -Headers $ECSAuthHeaders -Method Get -ContentType $ContentType ) | Select-Object  @{N="StoragePoolID";E={$_.id}},* -ExcludeProperty $Expandproperty
+        (Invoke-RestMethod -Uri $Uri -Headers $ECSAuthHeaders -Method Get -ContentType $ContentType ) | Select-Object  @{N="StoragePoolID";E={$_.id}},* -ExcludeProperty $Excludeproperty
         }
     catch
         {
