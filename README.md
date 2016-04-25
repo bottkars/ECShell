@@ -1,17 +1,20 @@
 # ECShell
 Powershell extension for EMC² ECS  Rest API
 
+## requirements
+powershell 3.0 is required to load the ECShell Modules
 ## getting started
 
-dowload and the modules file
+dowload and load the modules file in Powershell
 
 load the modules with 
 ```Powershell
-ipmo .\ECShell
+import-module .\ECShell
 ```
 to connect to a EMC ECS System, simply use:
 connect-ECSSystem
 You can specify the ecs credentials as Powershel PSCredentials or  type the in interactively
+if you connect using non-trusted certificates in the ecs, add -trustCert to the connection
 ```Powershell
 C:\gitHub> Connect-ECSSystem -ECSIP 192.168.2.246
 Please Enter ECS username: root
