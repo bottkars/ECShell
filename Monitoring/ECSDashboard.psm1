@@ -12,17 +12,24 @@ function Get-ECSLocalzoneDashboard
     $Myself = $MyInvocation.MyCommand.Name.Substring(7)
     $class = "dashboard/zones/localzone"
     $Expandproperty = "alert"
-    $Excludeproperty = "id"
+    $Excludeproperty = "_links"
     $ContentType = "application/json"
     $Method = "Get"
     }
     Process
     {
-    $Uri = "$ECSbaseurl/$($class)?dataType=current"
+    $Uri = "$ECSbaseurl/$($class)/$($type)?dataType=current"
     try
         {
         Write-Verbose $Uri
-        Invoke-RestMethod -Uri $Uri -Headers $ECSAuthHeaders -Method $Method -ContentType $ContentType  # | Select-Object  -ExpandProperty $Expandproperty 
+        if ($type)
+            {
+            Invoke-RestMethod -Uri $Uri -Headers $ECSAuthHeaders -Method $Method -ContentType $ContentType  | Select-Object  -ExpandProperty _embedded | Select-Object -ExpandProperty _instances  | Select-Object * -ExcludeProperty $Excludeproperty
+            }
+        else 
+            {
+            Invoke-RestMethod -Uri $Uri -Headers $ECSAuthHeaders -Method $Method -ContentType $ContentType  # | Select-Object  -ExpandProperty $Expandproperty 
+            }
         }
     catch
         {
@@ -198,3 +205,103 @@ function Get-ECSStoragePoolsDashboard
 
     }
 }
+
+function Get-ECSReplicationGroupsDashboard
+{
+    [CmdletBinding(DefaultParameterSetName = '1')]
+    Param
+    (
+        [Parameter(Mandatory=$true,ValueFromPipelineByPropertyName=$true,ParameterSetName='1')]
+        [Alias("id")]$ReplicationGroupID,
+        [Parameter(Mandatory=$false,ValueFromPipelineByPropertyName=$true,ParameterSetName='1')]
+        [ValidateSet('rglinks')]$type
+
+    )
+    Begin
+    {
+    $Myself = $MyInvocation.MyCommand.Name.Substring(7)
+    $class = "dashboard/replicationgroups"
+    $Expandproperty = "_embedded._instances"
+    $Excludeproperty = "_links"
+    $ContentType = "application/json"
+    $Method = "Get"
+    }
+    Process
+    {
+    $Uri = "$ECSbaseurl/$class/$ReplicationGroupID/$type"
+    try
+        {
+        Write-Verbose $Uri
+        if ($type)
+            {
+            Invoke-RestMethod -Uri $Uri -Headers $ECSAuthHeaders -Method $Method -ContentType $ContentType  | Select-Object  -ExpandProperty _embedded | Select-Object -ExpandProperty _instances  | Select-Object * -ExcludeProperty $Excludeproperty
+            }
+        else
+            {
+            Invoke-RestMethod -Uri $Uri -Headers $ECSAuthHeaders -Method $Method -ContentType $ContentType  #| Select-Object  -ExpandProperty _embedded | Select-Object -ExpandProperty _instances 
+            }
+        #Invoke-RestMethod -Uri $Uri -Headers $ECSAuthHeaders -Method $Method -ContentType $ContentType  | Select-Object *  -ExcludeProperty $Excludeproperty
+        }
+    catch
+        {
+        Get-ECSWebException -ExceptionMessage $_
+        #$_.Exception.Message
+        break
+        }
+    }
+    End
+    {
+
+    }
+}
+
+function Get-ECSReplicationGroupLinksDashboard
+{
+    [CmdletBinding(DefaultParameterSetName = '1')]
+    Param
+    (
+        [Parameter(Mandatory=$true,ValueFromPipelineByPropertyName=$true,ParameterSetName='1')]
+        [Alias("id")]$rglinkID
+    )
+    Begin
+    {
+    $Myself = $MyInvocation.MyCommand.Name.Substring(7)
+    $class = "dashboard/rglinks"
+    $Expandproperty = "_embedded._instances"
+    $Excludeproperty = "_links"
+    $ContentType = "application/json"
+    $Method = "Get"
+    }
+    Process
+    {
+    $Uri = "$ECSbaseurl/$class/$rglinkID"
+    try
+        {
+        Write-Verbose $Uri
+        <#if ($type)
+            {
+            Invoke-RestMethod -Uri $Uri -Headers $ECSAuthHeaders -Method $Method -ContentType $ContentType  | Select-Object  -ExpandProperty _embedded | Select-Object -ExpandProperty _instances  | Select-Object * -ExcludeProperty $Excludeproperty
+            }
+        else
+            {
+            Invoke-RestMethod -Uri $Uri -Headers $ECSAuthHeaders -Method $Method -ContentType $ContentType  #| Select-Object  -ExpandProperty _embedded | Select-Object -ExpandProperty _instances 
+            }#>
+        Invoke-RestMethod -Uri $Uri -Headers $ECSAuthHeaders -Method $Method -ContentType $ContentType  | Select-Object *  -ExcludeProperty $Excludeproperty
+        }
+    catch
+        {
+        Get-ECSWebException -ExceptionMessage $_
+        #$_.Exception.Message
+        break
+        }
+    }
+    End
+    {
+
+    }
+}
+
+
+#/dashboard/replicationgroups/{rg-id}/rglinks
+#https://192.168.0.0:4443/dashboard/replicationgroups/rg-id
+#/dashboard/rglinks/rglink-id.json
