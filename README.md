@@ -54,7 +54,25 @@ ECS                                     @{rel=self; href=/object/baseurl/urn... 
 DefaultBaseUrl                          @{rel=self; href=/object/baseurl/urn... urn:ObjectBaseUrl:31501a97-e68c-4684...
 myS3url                                 @{rel=self; href=/object/baseurl/urn... urn:ObjectBaseUrl:c1aee094-52de-4142...
 ```
+to retrieve the local connected vdc, use Get-ECSlocalvdc
 ```Powershell
+PS C:\Users\Karsten> Get-ECSlocalvdc
+
+name                  : VDCmunich
+id                    : urn:storageos:VirtualDataCenterData:2e30ccb8-ccf5-4166-a11d-1e17f92667c6
+link                  : @{rel=self; href=/object/vdcs/vdc/VDCmunich}
+inactive              : False
+global                :
+remote                :
+vdc                   :
+vdcId                 : urn:storageos:VirtualDataCenterData:2e30ccb8-ccf5-4166-a11d-1e17f92667c6
+vdcName               : VDCmunich
+interVdcEndPoints     : 10.64.253.161,10.64.253.162,10.64.253.163,10.64.253.164
+interVdcCmdEndPoints  : 10.64.253.161,10.64.253.162,10.64.253.163,10.64.253.164
+secretKeys            : DCqfSoqAqe4ecIBFoKXy
+permanentlyFailed     : False
+local                 : True
+is_encryption_enabled : True
 ```
 ```Powershell
 ```
