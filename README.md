@@ -74,16 +74,101 @@ permanentlyFailed     : False
 local                 : True
 is_encryption_enabled : True
 ```
+to get a list of namespaces
 ```Powershell
+PS C:\Users\Karsten> Get-ECSnamespaces
+
+Namespace                                                   name
+---------                                                   ----
+ans                                                         ans
+ben_namespace                                               ben_namespace
+centera_7e3e0aae-1dd2-11b2-b226-c645ba3ca1ea                centera_7e3e0aae-1dd2-11b2-b226-c645ba3ca1ea
+centrastar51                                                centrastar51
+cloudboost                                                  cloudboost
+cloudpools                                                  cloudpools
+compliance1                                                 compliance1
+cynthia                                                     cynthia
+dps_ns                                                      dps_ns
+hadoop                                                      hadoop
+hdfs_ns                                                     hdfs_ns
+isilon                                                      isilon
+lecorcns                                                    lecorcns
+lsc                                                         lsc
+mikkelbernhof                                               mikkelbernhof
+nehrman_ns                                                  nehrman_ns
+nfs_ns                                                      nfs_ns
+nsale                                                       nsale
+nsca                                                        nsca
+paris                                                       paris
+torsten1                                                    torsten1
+vdacosta_ns                                                 vdacosta_ns
+wien                                                        wien
+zivits3local                                                zivits3local
 ```
+create a bucket with New-ECSBucket
 ```Powershell
-```
-```Powershell
-```
-```Powershell
-```
+PS C:\Users\Karsten> New-ECSBucket -BucketName ecshell11 -namespace lsc -head_type s3
+
+Bucketname                                                  BucketID
+----------                                                  --------
+ecshell11                                                   lsc.ecshell11
 
 
+```
+create multiple buckets
+
+```Powershell
+PS C:\Users\Karsten> foreach ($n in 1..10) {New-ECSBucket -BucketName ecshell$n -namespace lsc -head_type s3 }
+
+Bucketname                                                  BucketID
+----------                                                  --------
+ecshell1                                                    lsc.ecshell1
+ecshell2                                                    lsc.ecshell2
+ecshell3                                                    lsc.ecshell3
+ecshell4                                                    lsc.ecshell4
+ecshell5                                                    lsc.ecshell5
+ecshell6                                                    lsc.ecshell6
+ecshell7                                                    lsc.ecshell7
+ecshell8                                                    lsc.ecshell8
+ecshell9                                                    lsc.ecshell9
+ecshell10                                                   lsc.ecshell10
+
+```
+remove buckets using Remove-ECSBucket
+```Powershell
+PS C:\Users\Karsten> Remove-ECSBucket -Bucketname ecshell11 -Namespace lsc
+
+commit bucket deletion
+this will delete bucket ecshell11 from namespace lsc
+[N] No  [Y] Yes  [?] Help (default is "N"): y
+
+bucket ecshell11 removed from namespace lsc
+```
+the above command requires confirmation. if to dlete multiple buckets without confirmation, use:
+
+```Powershell
+PS C:\Users\Karsten> Get-ECSBuckets -Namespace lsc | where Bucketname -match ecshell | Remove-ECSBucket -Confirm:$false
+
+bucket ecshell1 removed from namespace lsc
+
+bucket ecshell10 removed from namespace lsc
+
+bucket ecshell2 removed from namespace lsc
+
+bucket ecshell3 removed from namespace lsc
+
+bucket ecshell4 removed from namespace lsc
+
+bucket ecshell5 removed from namespace lsc
+
+bucket ecshell6 removed from namespace lsc
+
+bucket ecshell7 removed from namespace lsc
+
+bucket ecshell8 removed from namespace lsc
+
+bucket ecshell9 removed from namespace lsc
+```
 
 
 get a list of currently available commands

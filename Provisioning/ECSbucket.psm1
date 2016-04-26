@@ -45,10 +45,11 @@
 }
 function New-ECSBucket
 {
-    [CmdletBinding(DefaultParameterSetName = '0')]
+    [CmdletBinding(DefaultParameterSetName = '1')]
+    [OutputType('System.Management.Automation.PSCustomObject')]
     Param
     (
-        [Parameter(Mandatory=$true,ValueFromPipelineByPropertyName=$false,ParameterSetName='1')]
+        [Parameter(Mandatory=$true,ValueFromPipelineByPropertyName=$true,ParameterSetName='1')]
         [Alias("name")]
         $BucketName,
         [Parameter(Mandatory=$false,ValueFromPipelineByPropertyName=$true,ParameterSetName='1')]
@@ -60,8 +61,8 @@ function New-ECSBucket
         [Parameter(Mandatory=$true,ValueFromPipelineByPropertyName=$false,ParameterSetName='1')]
         [ValidateSet('s3','cas','swift','Hadoop')]
         $head_type,
-        [Parameter(Mandatory=$true,ValueFromPipelineByPropertyName=$false,ParameterSetName='1')]
-        $namespace = "ns1",
+        [Parameter(Mandatory=$true,ValueFromPipelineByPropertyName=$true,ParameterSetName='1')]
+        $namespace,
         [Parameter(Mandatory=$false,ValueFromPipelineByPropertyName=$false,ParameterSetName='1')]
         [switch]
         $is_stale_allowed
@@ -72,13 +73,14 @@ function New-ECSBucket
     $fsenabled = (($filesystem_enabled.IsPresent).ToString()).ToLower()
     $isstale = (($is_stale_allowed.IsPresent).ToString()).ToLower()
     $Myself = $MyInvocation.MyCommand.Name.Substring(7)
-    $class = "object"
+    $class = "name"
     $Expandproperty = "varray"
+    $Excludeproperty = ('name','metaData','TagSet')
     $ContentType = "application/json"
     }
     Process
     {
-    $body = @{   name = $BucketName
+    $body = [ordered]@{   name = $BucketName
     vpool = $vpoolid
     filesystem_enabled = "$fsenabled"
     head_type = $head_type
@@ -86,12 +88,11 @@ function New-ECSBucket
     is_stale_allowed = "$isstale"
     }
     $jsonbody = ConvertTo-Json $body
-
     $Uri = "$ECSbaseurl/object/bucket.json"
     Write-Verbose $Uri
     try
         {
-        $bucket = Invoke-RestMethod -Uri $Uri -Headers $ECSAuthHeaders -Method Post -Body $jsonbody -ContentType $ContentType  #| Select-Object -ExpandProperty $Expandproperty
+        Invoke-RestMethod -Uri $Uri -Headers $ECSAuthHeaders -Method Post -Body $jsonbody -ContentType $ContentType  | Select-Object @{N="Bucketname";E={$_.name}},@{N="BucketID";E={$_.id}} #-ExcludeProperty $Excludeproperty
         }
     catch
         {
@@ -99,7 +100,7 @@ function New-ECSBucket
         #$_.Exception.Message
         break
         }
-    Get-ECSBucketInfo -Namespace $namespace -Bucketname $BucketName
+    # Get-ECSBucketInfo -Namespace $namespace -Bucketname $BucketName
     }
     End
     {
@@ -148,7 +149,9 @@ function Get-ECSBucketInfo
 }
 function Remove-ECSBucket
 {
-    [CmdletBinding(DefaultParameterSetName = '1')]
+    [CmdletBinding(DefaultParameterSetName = '1',
+                        SupportsShouldProcess=$true, 
+                        ConfirmImpact='Medium')]
     Param
     (
         [Parameter(Mandatory=$true,ValueFromPipelineByPropertyName=$true,ParameterSetName='1')]
@@ -166,21 +169,41 @@ function Remove-ECSBucket
     }
     Process
     {
-    $Uri = "$ECSbaseurl/$class/$Bucketname/deactivate.json?namespace=$Namespace"
-    try
+    if ($ConfirmPreference -match "none")
+        { 
+        $commit = 1 
+        }
+    else
         {
-        if ($PSCmdlet.MyInvocation.BoundParameters["verbose"].IsPresent)
+        $commit = Get-ECSyesno -title "commit bucket deletion" -message "this will delete bucket $Bucketname from namespace $Namespace"
+        }
+    Switch ($commit)
+        {
+            1
             {
-            Write-Host -ForegroundColor Yellow "Calling $uri with Method $method"
+            $Uri = "$ECSbaseurl/$class/$Bucketname/deactivate.json?namespace=$Namespace"
+            try
+                {
+                if ($PSCmdlet.MyInvocation.BoundParameters["verbose"].IsPresent)
+                    {
+                    Write-Host -ForegroundColor Yellow "Calling $uri with Method $method"
+                    }
+                Invoke-RestMethod -Uri $Uri -Headers $ECSAuthHeaders -Method $Method -ContentType $ContentType
+                }
+            catch
+                {
+                Get-ECSWebException -ExceptionMessage $_
+                #$_.Exception.Message
+                break
+                }
+            Write-Host -ForegroundColor Magenta "bucket $BucketName removed from namespace $Namespace"
             }
-        Invoke-RestMethod -Uri $Uri -Headers $ECSAuthHeaders -Method $Method -ContentType $ContentType
+            0
+            {
+            Write-Warning "bucket deletion  refused by user for bucket $Bucketname"
+            }      
         }
-    catch
-        {
-        Get-ECSWebException -ExceptionMessage $_
-        #$_.Exception.Message
-        break
-        }
+
     }
     End
     {
