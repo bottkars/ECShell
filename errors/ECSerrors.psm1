@@ -22,10 +22,17 @@ Function Get-ECSWebException
                  {
                 switch -Wildcard ($ExceptionMessage.Exception)
                     {
+                    "*SSL/TLS secure channel*"
+                        {
+                        Write-Host -ForegroundColor Magenta $ExceptionMessage
+                        Write-Host -ForegroundColor White "SSL/TLS secure channel error indicates untrasted certificates. Connect using -trustCert Option !"
+
+                        }
+                    
                     "*400*"
                         {
                         Write-Host -ForegroundColor Magenta $ExceptionMessage
-                        Write-Host -ForegroundColor White "400 Bad Request Badly formed URI, parameters, headers, or body content. Essentially a request syntax error or obcejt not found"
+                        Write-Host -ForegroundColor White "400 Bad Request Badly formed URI, parameters, headers, or body content. Essentially a request syntax error or object not found"
                         }
                     "*401*"
                         {
@@ -102,10 +109,11 @@ This code is returned for internal errors - file an AR. It also is returned in s
             default
                 {
                 Write-Host -ForegroundColor Cyan "error not yet declared"
+                Write-Warning "'$($ExceptionMessage.InvocationInfo.InvocationName) '
+Calling Position: $($ExceptionMessage.InvocationInfo.PositionMessage)
+$($ExceptionMessage.FullyQualifiedErrorId)"
                 }
             }
 
-        Write-Warning "'$($ExceptionMessage.InvocationInfo.InvocationName) '
-Calling Position: $($ExceptionMessage.InvocationInfo.PositionMessage)
-$($ExceptionMessage.FullyQualifiedErrorId)"
+
     }
