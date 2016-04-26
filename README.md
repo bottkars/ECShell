@@ -73,3 +73,5 @@ Set-ECScertificate                                          Set-ECSManagementUse
 Set-ECSObjectUserSecretKeys                                 Set-ECSvdc
 Unblock-ECSCerts
 ```
+## Examples
+Retrieve
