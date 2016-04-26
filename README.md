@@ -37,16 +37,33 @@ GLOBAL
 
 PS C:\Users\Karsten>
 ```
-you may alos use the pipeline to pass credentials
+you may also use the pipeline to pass credentials
 ```powershell
 Get-Credential -UserName root  -Message "enter password for ECS" | Connect-ECSSystem -ECSIP 192.168.2.246
 Successfully connected to ECS https://192.168.2.246:4443
 ```
 
 ## Examples
-Retrieve
+Retrieve information about Base URL´s  
+```Powershell
+PS C:\Users\Karsten> Get-ECSbaseurl
 
-
+name                                    link                                    id
+----                                    ----                                    --
+ECS                                     @{rel=self; href=/object/baseurl/urn... urn:ObjectBaseUrl:05a9d891-3740-49d1...
+DefaultBaseUrl                          @{rel=self; href=/object/baseurl/urn... urn:ObjectBaseUrl:31501a97-e68c-4684...
+myS3url                                 @{rel=self; href=/object/baseurl/urn... urn:ObjectBaseUrl:c1aee094-52de-4142...
+```
+```Powershell
+```
+```Powershell
+```
+```Powershell
+```
+```Powershell
+```
+```Powershell
+```
 
 
 
