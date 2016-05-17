@@ -117,6 +117,7 @@ function Get-ECSDiskDashboard
     $Excludeproperty = ('_links','id')
     $ContentType = "application/json"
     $Method = "Get"
+    $elementname = "Disk"
     }
     Process
     {
@@ -124,7 +125,7 @@ function Get-ECSDiskDashboard
     try
         {
         Write-Verbose $Uri
-        Invoke-RestMethod -Uri $Uri -Headers $ECSAuthHeaders -Method $Method -ContentType $ContentType  | Select-Object *  -ExcludeProperty $Excludeproperty
+        Invoke-RestMethod -Uri $Uri -Headers $ECSAuthHeaders -Method $Method -ContentType $ContentType  | Select-Object @{N="$($elementname)id";E={$_.id}},*   -ExcludeProperty $Excludeproperty
         }
     catch
         {
@@ -312,6 +313,7 @@ function Get-ECSReplicationGroupLinksDashboard
 
     }
 }
+
 
 
 #/dashboard/replicationgroups/{rg-id}/rglinks
