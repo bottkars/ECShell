@@ -127,40 +127,6 @@ $options = [System.Management.Automation.Host.ChoiceDescription[]]($no, $yes)
 $result = $host.ui.PromptForChoice($title, $message, $options, 0)
 return ($result)
 }
-function Get-ECSnamespaces
-{
-    [CmdletBinding(DefaultParameterSetName = '0')]
-    Param
-    (
-    )
-    Begin
-    {
-    $Myself = $MyInvocation.MyCommand.Name.Substring(7)
-    $class = "object"
-    $Excludeproperties = ('link')
-    $Expandproperty = "namespace"
-    $ContentType = "application/json"
-    }
-    Process
-    {
-    $Uri = "$ECSbaseurl/$class/$Myself.json"
-    try
-        {
-        Write-Verbose $Uri
-        (Invoke-RestMethod -Uri $Uri -Headers $ECSAuthHeaders -Method Get  -ContentType $ContentType ) | Select-Object -ExpandProperty $Expandproperty -ExcludeProperty $Excludeproperties | Select-Object @{N="Namespace";E={$_.id}},name
-        # @{N="$($Myself)ID";E={$_.id}},* 
-        }
-    catch
-        {
-        Get-ECSWebException -ExceptionMessage $_
-        break
-        }
-    }
-    End
-    {
-
-    }
-}
 function Disconnect-ECSSystem
 {
 begin

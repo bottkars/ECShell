@@ -77,7 +77,10 @@ NestedModules = @('.\utils\utils.psm1'
 '.\Users\ECSManagementUser.psm1',
 '.\Monitoring\ECSalerts.psm1',
 '.\Monitoring\ECScapacity.psm1',
-'.\Monitoring\ECSDashboard.psm1')
+'.\Monitoring\ECSDashboard.psm1',
+'.\Multitenancy\ECSNamespace.psm1',
+'.\Geo-Replication\ECSReplicationGroups.psm1')
+
 
 # Functions to export from this module
 FunctionsToExport = '*ECS*'
