@@ -1,4 +1,4 @@
-ï»¿<#
+<#
 .Synopsis
    Short description
 .DESCRIPTION
@@ -39,7 +39,7 @@ function Connect-ECSSystem
         {
         $User = Read-Host -Prompt "Please Enter ECS username"
         $SecurePassword = Read-Host -Prompt "Enter ECS Password for user $user" -AsSecureString
-        $Credentials = New-Object System.Management.Automation.PSCredential (â€œ$userâ€,$Securepassword)
+        $Credentials = New-Object System.Management.Automation.PSCredential (“$user”,$Securepassword)
         }
     write-Verbose "Generating Login Token"
     $Global:ECSbaseurl = "https://$($ECSIP):$ECSPort"
@@ -152,10 +152,14 @@ process
 try
     {
     Write-Verbose "$Global:ECSbaseurl/users/whoami"
-    (Invoke-RestMethod -Uri "$Global:ECSbaseurl/user/whoami" -Headers $Global:ECSAuthHeaders -ContentType $ContentType).childnodes[1]  | Select-Object -Property $IncludeProperty  -ExpandProperty roles     }catch    {    Get-ECSWebException -ExceptionMessage $_ 
-    #$_.Exception.Message    }
+    (Invoke-RestMethod -Uri "$Global:ECSbaseurl/user/whoami" -Headers $Global:ECSAuthHeaders -ContentType $ContentType).childnodes[1]  | Select-Object -Property $IncludeProperty  -ExpandProperty roles 
+    }
+catch
+    {
+    Get-ECSWebException -ExceptionMessage $_ 
+    #$_.Exception.Message
+    }
 }
 end{}
 }
-
 
