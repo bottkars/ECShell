@@ -3,7 +3,6 @@
 | ------ | -------- |
 | master | [![Build status](https://ci.appveyor.com/api/projects/status/uf208r8tekr89amq?svg=true)](https://ci.appveyor.com/project/bottkars/ecshell)
 
-
 # ECShell
 Powershell extension for EMC ECS  Rest API
 This is the Readme for 2.2.1 and 3.0, for 2.2.0 checkout branch 2.2.0
@@ -12,12 +11,10 @@ This is the Readme for 2.2.1 and 3.0, for 2.2.0 checkout branch 2.2.0
 powershell 3.0 is required to load the ECShell Modules
 ## getting started
 
-
 ### installing
 for Powershell 3.0 or greater
 copy the content of this gist https://gist.githubusercontent.com/bottkars/08c7db8ba43982c94e21bd41e3837c98/raw/installer
 into a powershell window. the Installer will install the modules in the default path c:\ECChell
-
 
 load the modules with 
 ```Powershell
