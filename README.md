@@ -1,5 +1,5 @@
-# ECShell
-Powershell extension for EMC² ECS  Rest API
+﻿# ECShell
+Powershell extension for EMCÂ² ECS  Rest API
 This is the Readme for 2.2.1, for 2.2.0 checkout branch 2.2.0
 
 ## requirements
@@ -45,7 +45,7 @@ Successfully connected to ECS https://192.168.2.246:4443
 ```
 
 ## Examples
-Retrieve information about Base URL�s  
+Retrieve information about Base URL´s  
 ```Powershell
 PS C:\Users\Karsten> Get-ECSbaseurl
 
