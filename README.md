@@ -1,6 +1,6 @@
 ﻿# ECShell
-Powershell extension for EMCÂ² ECS  Rest API
-This is the Readme for 2.2.1, for 2.2.0 checkout branch 2.2.0
+Powershell extension for EMC ECS  Rest API
+This is the Readme for 2.2.1 and 3.0, for 2.2.0 checkout branch 2.2.0
 
 ## requirements
 powershell 3.0 is required to load the ECShell Modules
