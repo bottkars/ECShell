@@ -1,3 +1,9 @@
+
+| Branch | AppVeyor |
+| ------ | -------- |
+| master | [![Build status](https://ci.appveyor.com/api/projects/status/uf208r8tekr89amq?svg=true)](https://ci.appveyor.com/project/bottkars/ecshell)
+
+
 # ECShell
 Powershell extension for EMC ECS  Rest API
 This is the Readme for 2.2.1 and 3.0, for 2.2.0 checkout branch 2.2.0
