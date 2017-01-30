@@ -25,7 +25,7 @@ CompanyName = 'DELL'
 Copyright = '2017'
 
 # Description of the functionality provided by this module
-Description = 'Powershell/Rest Module for EMC ECS Configuration and Management'
+Description = 'Powershell/Rest Module for EMC ECS Object STorage Configuration and Management'
 
 # Minimum version of the Windows PowerShell engine required by this module
 PowerShellVersion = '3.0'
