@@ -19,10 +19,10 @@ GUID = '2a95bee0-34e3-4b1e-bef4-e8a310495c05'
 Author = 'Karsten Bott'
 
 # Company or vendor of this module
-CompanyName = 'EMC²'
+CompanyName = 'DELL'
 
 # Copyright statement for this module
-Copyright = '2016'
+Copyright = '2017'
 
 # Description of the functionality provided by this module
 Description = 'Powershell/Rest Module for EMC ECS Configuration and Management'
