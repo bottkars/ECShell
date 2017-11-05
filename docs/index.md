@@ -25,19 +25,17 @@ load the modules with
 import-module .\ECShell
 ```
 to connect to a EMC ECS System, simply use:
-connect-ECSSystem
-You can specify the ecs credentials as Powershel PSCredentials or  type the in interactively
-if you connect using non-trusted certificates in the ecs, add -trustCert to the connection
+connect-ECSSystem  
+You can specify ECS credentials as Powershell PSCredentials or type them in interactively  
+if you connect using non-trusted certificates in the ecs, add -trustCert to the connection  
 ```Powershell
 Windows PowerShell
 Copyright (C) 2014 Microsoft Corporation. All rights reserved.
-
-PS C:\Users\Karsten> ipmo E:\GitHub\ECShell
-PS C:\Users\Karsten> Connect-ECSSystem -ECSIP 10.64.253.161
+Connect-ECSSystem -ECSIP 10.64.253.161
 Please Enter ECS username: root
 Enter ECS Password for user root: ********
 The underlying connection was closed: Could not establish trust relationship for the SSL/TLS secure channel.
-SSL/TLS secure channel error indicates untrasted certificates. Connect using -trustCert Option !
+SSL/TLS secure channel error indicates untrusted certificates. Connect using -trustCert Option !
 PS C:\Users\Karsten> Connect-ECSSystem -ECSIP 10.64.253.161 -trustCert
 Please Enter ECS username: root
 Enter ECS Password for user root: ********
