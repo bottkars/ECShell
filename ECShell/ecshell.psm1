@@ -40,7 +40,7 @@ function Connect-ECSSystem
         {
         $User = Read-Host -Prompt "Please Enter ECS username"
         $SecurePassword = Read-Host -Prompt "Enter ECS Password for user $user" -AsSecureString
-        $Credentials = New-Object System.Management.Automation.PSCredential (�$user�,$Securepassword)
+        $Credentials = New-Object System.Management.Automation.PSCredential ($user,$Securepassword)
         }
     write-Verbose "Generating Login Token"
     $Global:ECSbaseurl = "https://$($ECSIP):$ECSPort"
