@@ -1,0 +1,12 @@
+site_name: ECShell Documentation
+repo_url: https://github.com/bottkars/ECShell
+site_author: Karsten Bott
+theme: readthedocs
+
+copyright: "ECShell
+is licensed under the <a href='https://https://github.com/bottkars/iDRAC4Redfish/blob/master/LICENSE'>MIT license</a>"
+pages:
+  - Home: index.md
+  - Installation: installation.md
+  - Examples: 
+
