@@ -16,7 +16,7 @@ powershell 3.0 is required to load the ECShell Modules
 ### installing
 
 ```Powershell
-install-module ECShell -Scope CurrentUser
+Install-Module ECshell -Scope CurrentUser
 ```
 
 
