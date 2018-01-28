@@ -10,7 +10,7 @@
 # Script module or binary module file associated with this manifest.
 RootModule = 'ECShell.psm1'
 # Version number of this module.
-ModuleVersion = '3.0.1'
+ModuleVersion = '3.1.0'
 
 # ID used to uniquely identify this module
 GUID = '2a95bee0-34e3-4b1e-bef4-e8a310495c05'
@@ -19,13 +19,13 @@ GUID = '2a95bee0-34e3-4b1e-bef4-e8a310495c05'
 Author = 'Karsten Bott'
 
 # Company or vendor of this module
-CompanyName = 'DELL'
+CompanyName = 'DELL|EMC'
 
 # Copyright statement for this module
-Copyright = '2017'
+Copyright = '2018'
 
 # Description of the functionality provided by this module
-Description = 'Powershell/Rest Module for EMC ECS Object STorage Configuration and Management'
+Description = 'Powershell/Rest Module for DELL|EMC ECS Object Storage Configuration,Metering and Management'
 
 # Minimum version of the Windows PowerShell engine required by this module
 PowerShellVersion = '3.0'
