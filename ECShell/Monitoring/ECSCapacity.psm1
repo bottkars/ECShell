@@ -1,4 +1,5 @@
-﻿function Get-ECScapacity
+﻿#/object/billing/buckets/{namespace}/{bucketName}/info
+function Get-ECScapacity
 {
     [CmdletBinding(DefaultParameterSetName = '1')]
     Param

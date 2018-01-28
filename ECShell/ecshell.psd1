@@ -10,7 +10,7 @@
 # Script module or binary module file associated with this manifest.
 RootModule = 'ECShell.psm1'
 # Version number of this module.
-ModuleVersion = '2.0.1'
+ModuleVersion = '3.0.1'
 
 # ID used to uniquely identify this module
 GUID = '2a95bee0-34e3-4b1e-bef4-e8a310495c05'
@@ -73,6 +73,7 @@ NestedModules = @('.\utils\utils.psm1'
 '.\Users\ECSObjectUser.psm1',
 '.\Users\ECSObjectUserKeys.psm1',
 '.\Users\ECSManagementUser.psm1',
+'.\Metering\ECSBilling.psm1',
 '.\Monitoring\ECSalerts.psm1',
 '.\Monitoring\ECScapacity.psm1',
 '.\Monitoring\ECSDashboard.psm1',
