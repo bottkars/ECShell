@@ -1,9 +1,9 @@
 # using cmdlets from the metering api
 
-ECShell aht some commands implemented for the Metering api
+ECShell commands implemented for using the Metering api
 
 ## Bucket Billing Info 
-to get billing information for a specific bucket use `Get-ECSBucketBilling´
+to get billing information for a specific bucket use `Get-ECSBucketBilling`
 
 ```Powershell
 Get-ECSBucketBilling -Namespace ns1 -Bucketname test
