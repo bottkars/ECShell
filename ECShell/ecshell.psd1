@@ -10,7 +10,7 @@
 # Script module or binary module file associated with this manifest.
 RootModule = 'ECShell.psm1'
 # Version number of this module.
-ModuleVersion = '3.1.0'
+ModuleVersion = '3.1.0.2'
 
 # ID used to uniquely identify this module
 GUID = '2a95bee0-34e3-4b1e-bef4-e8a310495c05'
