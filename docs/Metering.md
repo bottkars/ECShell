@@ -107,3 +107,62 @@ ns1       bucket2 2018-01-01T00:00:00Z 2018-01-31T23:55:00Z 41              0   
 ns1       test    2018-01-01T00:00:00Z 2018-01-31T23:55:00Z 5               0               1617002503  1542       MB              5
 
 ```
+
+## enhanced queries
+
+all the above commands support pipelining, however, pipelines would cause an API request per Object.
+As the API supports also sending a list of Buckets or Namespaces in a query, the commands `Get-ECSBucketBillingList` and Get-ECSNamespaceBillingList` to get billing information for multiple items
+
+###EXAMPLE 1
+
+```Powershell
+Get-ECSBucketBillingList -Namespace ns1 -Bucketlist bucket1,bucket2,bucket3 -sizeunit MB | ft -AutoSize
+
+namespace name    sample_time          vpool_id                                                                       total_size total_size_unit total
+                                                                                                                                                 _obje
+                                                                                                                                                   cts
+--------- ----    -----------          --------                                                                       ---------- --------------- -----
+ns1       bucket1 2018-01-29T07:44:24Z urn:storageos:ReplicationGroupInfo:a4ebded4-ce6f-4918-8756-101df81caa5b:global        430 MB                130
+ns1       bucket2 2018-01-29T07:44:24Z urn:storageos:ReplicationGroupInfo:a4ebded4-ce6f-4918-8756-101df81caa5b:global        122 MB                 41
+ns1       bucket3 2018-01-29T07:44:24Z urn:storageos:ReplicationGroupInfo:a4ebded4-ce6f-4918-8756-101df81caa5b:global          0 MB                  0
+
+```
+###EXAMPLE 2
+
+
+```Powershell
+Get-ECSNamespaceBillingList -NamespaceList ns1 -start_time 2018-01-01T00:00 -end_time 2018-01-31T23:55 -sizeunit MB
+
+
+namespace         : ns1
+sample_start_time : 2018-01-01T00:00:00Z
+sample_end_time   : 2018-01-31T23:55:00Z
+objects_created   : 176
+objects_deleted   : 0
+bytes_delta       : 2195151890
+total_size        : 2093
+total_size_unit   : MB
+total_objects     : 176
+ingress           : 2195151890
+egress            : 0
+next_marker       :
+```
+
+```Powershell
+Get-ECSNamespaceBillingList -NamespaceList ns1 -start_time 2018-01-01T00:00 -end_time 2018-01-31T23:55 -sizeunit MB -bucketdetails
+
+
+namespace             : ns1
+sample_start_time     : 2018-01-01T00:00:00Z
+sample_end_time       : 2018-01-31T23:55:00Z
+objects_created       : 176
+objects_deleted       : 0
+bytes_delta           : 2195151890
+total_size            : 2094
+total_size_unit       : MB
+total_objects         : 176
+ingress               : 2195151890
+egress                : 0
+bucket_billing_sample : {bucket1, bucket2, bucket3, bucket4...}
+next_marker           :
+```
