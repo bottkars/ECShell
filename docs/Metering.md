@@ -42,3 +42,21 @@ ingress           : 1617002503
 egress            : 0  
 TagSet            :  
 >>>
+
+## using different Meaurement Units 
+teh default unit of mesurement is GB. However, if you are going to meter upon KB or MB, just ass `-sizeunit` to the Commands, ie
+
+```Powershell
+Get-ECSBucketBilling -Namespace ns1 -Bucketname test -sizeunit MB
+```
+
+>
+namespace       : ns1  
+name            : test  
+sample_time     : 2018-01-29T05:04:09Z  
+vpool_id        : urn:storageos:ReplicationGroupInfo:a4ebded4-ce6f-4918-8756-101df81caa5b:global  
+total_size      : 1542  
+total_size_unit : MB  
+total_objects   : 5  
+TagSet          :  
+>
