@@ -18,7 +18,7 @@ Get-ECSBucketBilling -Namespace ns1 -Bucketname test
 >total_objects   : 5  
 >TagSet          :  
 
-## Bucket Billing Info for a sample interval
+## Bucket Billing for a sample interval
 
 you can specify `-start_time` and `-end_time` with `Get-ECSBucketBilling` to get a Sample Interval for billing  
 
@@ -43,14 +43,13 @@ egress            : 0
 TagSet            :  
 >
 
-## using different Meaurement Units 
+## using different Meaurement Units on Bucket Billing 
 teh default unit of mesurement is GB. However, if you are going to meter upon KB or MB, just ass `-sizeunit` to the Commands, ie
 
 ```Powershell
 Get-ECSBucketBilling -Namespace ns1 -Bucketname test -sizeunit MB
-```
 
->
+
 namespace       : ns1  
 name            : test  
 sample_time     : 2018-01-29T05:04:09Z  
@@ -59,7 +58,7 @@ total_size      : 1542
 total_size_unit : MB  
 total_objects   : 5  
 TagSet          :  
->
+```
 
 
 ```Powershell
