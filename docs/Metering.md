@@ -83,7 +83,7 @@ TagSet            :
 
 ###Examples
 
-*Pipelining 
+**Pipelining** 
 ```Powershell
 Get-ECSBuckets -Namespace ns1 | Get-ECSBucketBilling -sizeunit KB | ft -AutoSize
 
@@ -96,7 +96,7 @@ ns1       bucket4 2018-01-29T05:11:36Z urn:storageos:ReplicationGroupInfo:a4ebde
 ns1       test    2018-01-29T05:11:36Z urn:storageos:ReplicationGroupInfo:a4ebded4-ce6f-4918-8756-101df81caa5b:global 1579104    KB              5
 ```
 
-*Advanced formatting
+**Advanced formatting**
 ```Powershell
 Get-ECSBuckets -Namespace ns1 |  Get-ECSBucketBilling -start_time 2018-01-01T00:00 -end_time 2018-01-31T23:55 -sizeunit MB | where total_objects -ne 0 | select * -ExcludeProperty vpool_id | ft
 
