@@ -111,7 +111,7 @@ ns1       test    2018-01-01T00:00:00Z 2018-01-31T23:55:00Z 5               0   
 ## enhanced queries
 
 all the above commands support pipelining, however, pipelines would cause an API request per Object.
-As the API supports also sending a list of Buckets or Namespaces in a query, the commands `Get-ECSBucketBillingList` and Get-ECSNamespaceBillingList` to get billing information for multiple items
+As the API supports also sending a list of Buckets or Namespaces in a query, the commands `Get-ECSBucketBillingList` and `Get-ECSNamespaceBillingList` to get billing information for multiple items
 
 ###EXAMPLE 1
 
