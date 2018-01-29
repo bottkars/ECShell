@@ -6,26 +6,26 @@ Getting Started withn ECShell
 | master | [![Build status](https://ci.appveyor.com/api/projects/status/uf208r8tekr89amq?svg=true)](https://ci.appveyor.com/project/bottkars/ecshell)
 
 # ECShell
-Powershell extension for EMC ECS  Rest API
-This is the Readme for 2.2.1 and 3.0, for 2.2.0 checkout branch 2.2.0
+Powershell extension for EMC ECS  Rest API  
+This is the Readme for 2.2.1, 3.0 and 3.1, for 2.2.0 checkout branch 2.2.0  
 
 ## requirements
-powershell 3.0 is required to load the ECShell Modules
+powershell 3.0 is required to load the ECShell Modules  
 ## getting started
 
 ### installing
 
 ```Powershell
-Install-Module ECshell -Scope CurrentUser
+Install-Module ECshell -Scope CurrentUser  
 ```
 
 
 load the modules with 
 ```Powershell
-import-module .\ECShell
+import-module .\ECShell  
 ```
 to connect to a EMC ECS System, simply use:
-connect-ECSSystem  
+`connect-ECSSystem`   
 You can specify ECS credentials as Powershell PSCredentials or type them in interactively  
 if you connect using non-trusted certificates in the ecs, add -trustCert to the connection  
 ```Powershell
