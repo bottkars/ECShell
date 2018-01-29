@@ -22,7 +22,8 @@ Get-ECSBucketBilling -Namespace ns1 -Bucketname test
 
 you can specify `-start_time` and `-end_time` with `Get-ECSBucketBilling` to get a Sample Interval for billing  
 
-```Powershell Get-ECSBucketBilling -Namespace ns1 -Bucketname test -start_time 2018-01-01T00:00 -end_time 2018-01-31T23:55
+```Powershell 
+Get-ECSBucketBilling -Namespace ns1 -Bucketname test -start_time 2018-01-01T00:00 -end_time 2018-01-31T23:55
 ```
 
 >>>
