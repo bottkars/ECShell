@@ -5,7 +5,7 @@ function Get-ECSLocalzoneDashboard
     Param
     (
         [Parameter(Mandatory=$false,ValueFromPipelineByPropertyName=$true,ParameterSetName='1')]
-        [Alias("name")][ValidateSet('storagepools','nodes','replicationgroups','rglinksFailed','rglinksBootstrap')]$type
+        [Alias("name")][ValidateSet('storagepools','nodes','replicationgroups','rglinksFailed','rglinksBootstrap','disks')]$type
     )
     Begin
     {
@@ -38,6 +38,334 @@ function Get-ECSLocalzoneDashboard
             {
             Invoke-RestMethod -Uri $Uri -Headers $ECSAuthHeaders -Method $Method -ContentType $ContentType  # | Select-Object  -ExpandProperty $Expandproperty 
             }
+        }
+    catch
+        {
+        Get-ECSWebException -ExceptionMessage $_
+        #$_.Exception.Message
+        break
+        }
+    }
+    End
+    {
+
+    }
+}
+
+function Get-ECSLocalzoneNodes  {
+    [CmdletBinding(DefaultParameterSetName = '1')]
+    Param()
+    Begin
+    {
+    $Myself = $MyInvocation.MyCommand.Name.Substring(16).ToLower()
+    $class = "dashboard/zones/localzone"
+    $Expandproperty = "alert"
+    $Excludeproperty = ('_links','id')
+    $ContentType = "application/json"
+    $Method = "Get"
+    }
+    Process
+    {
+    $Uri = "$ECSbaseurl/$($class)/$($Myself)?dataType=current"
+    try
+        {
+        Write-Verbose $Uri
+        Invoke-RestMethod -Uri $Uri -Headers $ECSAuthHeaders -Method $Method -ContentType $ContentType  | Select-Object  -ExpandProperty _embedded | Select-Object -ExpandProperty _instances  | Select-Object @{N="$($elementname)id";E={$_.id}},* -ExcludeProperty $Excludeproperty
+        }
+    catch
+        {
+        Get-ECSWebException -ExceptionMessage $_
+        #$_.Exception.Message
+        break
+        }
+    }
+    End
+    {
+
+    }
+}
+function Get-ECSLocalzoneDisks  {
+    [CmdletBinding(DefaultParameterSetName = '1')]
+    Param()
+    Begin
+    {
+    $Myself = $MyInvocation.MyCommand.Name.Substring(16).ToLower()
+    $class = "dashboard/zones/localzone"
+    $Expandproperty = "alert"
+    $Excludeproperty = ('_links','id')
+    $ContentType = "application/json"
+    $Method = "Get"
+    }
+    Process
+    {
+    $Uri = "$ECSbaseurl/$($class)/$($Myself)?dataType=current"
+    try
+        {
+        Write-Verbose $Uri
+        Invoke-RestMethod -Uri $Uri -Headers $ECSAuthHeaders -Method $Method -ContentType $ContentType  | Select-Object  -ExpandProperty _embedded | Select-Object -ExpandProperty _instances  | Select-Object @{N="$($elementname)id";E={$_.id}},* -ExcludeProperty $Excludeproperty
+        }
+    catch
+        {
+        Get-ECSWebException -ExceptionMessage $_
+        #$_.Exception.Message
+        break
+        }
+    }
+    End
+    {
+
+    }
+}
+function Get-ECSLocalzoneReplicationgroups  {
+    [CmdletBinding(DefaultParameterSetName = '1')]
+    Param()
+    Begin
+    {
+    $Myself = $MyInvocation.MyCommand.Name.Substring(16).ToLower()
+    $class = "dashboard/zones/localzone"
+    $Expandproperty = "alert"
+    $Excludeproperty = ('_links','id')
+    $ContentType = "application/json"
+    $Method = "Get"
+    }
+    Process
+    {
+    $Uri = "$ECSbaseurl/$($class)/$($Myself)?dataType=current"
+    try
+        {
+        Write-Verbose $Uri
+        Invoke-RestMethod -Uri $Uri -Headers $ECSAuthHeaders -Method $Method -ContentType $ContentType  | Select-Object  -ExpandProperty _embedded | Select-Object -ExpandProperty _instances  | Select-Object @{N="$($elementname)id";E={$_.id}},* -ExcludeProperty $Excludeproperty
+        }
+    catch
+        {
+        Get-ECSWebException -ExceptionMessage $_
+        #$_.Exception.Message
+        break
+        }
+    }
+    End
+    {
+
+    }
+}
+function Get-ECSLocalzoneStoragepools  {
+    [CmdletBinding(DefaultParameterSetName = '1')]
+    Param()
+    Begin
+    {
+    $Myself = $MyInvocation.MyCommand.Name.Substring(16).ToLower()
+    $class = "dashboard/zones/localzone"
+    $Expandproperty = "alert"
+    $Excludeproperty = ('_links','id')
+    $ContentType = "application/json"
+    $Method = "Get"
+    }
+    Process
+    {
+    $Uri = "$ECSbaseurl/$($class)/$($Myself)?dataType=current"
+    try
+        {
+        Write-Verbose $Uri
+        Invoke-RestMethod -Uri $Uri -Headers $ECSAuthHeaders -Method $Method -ContentType $ContentType  | Select-Object  -ExpandProperty _embedded | Select-Object -ExpandProperty _instances  | Select-Object @{N="$($elementname)id";E={$_.id}},* -ExcludeProperty $Excludeproperty
+        }
+    catch
+        {
+        Get-ECSWebException -ExceptionMessage $_
+        #$_.Exception.Message
+        break
+        }
+    }
+    End
+    {
+
+    }
+}
+function Get-ECSLocalzonerglinksFailed  {
+    [CmdletBinding(DefaultParameterSetName = '1')]
+    Param()
+    Begin
+    {
+    $Myself = $MyInvocation.MyCommand.Name.Substring(16).ToLower()
+    $class = "dashboard/zones/localzone"
+    $Expandproperty = "alert"
+    $Excludeproperty = ('_links','id')
+    $ContentType = "application/json"
+    $Method = "Get"
+    }
+    Process
+    {
+    $Uri = "$ECSbaseurl/$($class)/$($Myself)?dataType=current"
+    try
+        {
+        Write-Verbose $Uri
+        Invoke-RestMethod -Uri $Uri -Headers $ECSAuthHeaders -Method $Method -ContentType $ContentType  | Select-Object  -ExpandProperty _embedded | Select-Object -ExpandProperty _instances  | Select-Object @{N="$($elementname)id";E={$_.id}},* -ExcludeProperty $Excludeproperty
+        }
+    catch
+        {
+        Get-ECSWebException -ExceptionMessage $_
+        #$_.Exception.Message
+        break
+        }
+    }
+    End
+    {
+
+    }
+}
+function Get-ECSLocalzonerglinksBootstrap  {
+    [CmdletBinding(DefaultParameterSetName = '1')]
+    Param()
+    Begin
+    {
+    $Myself = $MyInvocation.MyCommand.Name.Substring(16).ToLower()
+    $class = "dashboard/zones/localzone"
+    $Expandproperty = "alert"
+    $Excludeproperty = ('_links','id')
+    $ContentType = "application/json"
+    $Method = "Get"
+    }
+    Process
+    {
+    $Uri = "$ECSbaseurl/$($class)/$($Myself)?dataType=current"
+    try
+        {
+        Write-Verbose $Uri
+        Invoke-RestMethod -Uri $Uri -Headers $ECSAuthHeaders -Method $Method -ContentType $ContentType  | Select-Object  -ExpandProperty _embedded | Select-Object -ExpandProperty _instances  | Select-Object @{N="$($elementname)id";E={$_.id}},* -ExcludeProperty $Excludeproperty
+        }
+    catch
+        {
+        Get-ECSWebException -ExceptionMessage $_
+        #$_.Exception.Message
+        break
+        }
+    }
+    End
+    {
+
+    }
+}
+function Get-ECSLocalzone  {
+    [CmdletBinding(DefaultParameterSetName = '1')]
+    Param()
+    Begin
+    {
+    $class = "dashboard/zones/localzone"
+    $Expandproperty = "alert"
+    $Excludeproperty = ('_links','id')
+    $ContentType = "application/json"
+    $Method = "Get"
+    }
+    Process
+    {
+    $Uri = "$ECSbaseurl/$($class)?dataType=current"
+    try
+        {
+        Write-Verbose $Uri
+        Invoke-RestMethod -Uri $Uri -Headers $ECSAuthHeaders -Method $Method -ContentType $ContentType # | Select-Object  -ExpandProperty _embedded | Select-Object -ExpandProperty _instances  | Select-Object @{N="$($elementname)id";E={$_.id}},* -ExcludeProperty $Excludeproperty
+        }
+    catch
+        {
+        Get-ECSWebException -ExceptionMessage $_
+        #$_.Exception.Message
+        break
+        }
+    }
+    End
+    {
+
+    }
+}
+
+function Get-ECSZone  {
+    [CmdletBinding(DefaultParameterSetName = '1')]
+    Param(
+        [Parameter(Mandatory=$true,ValueFromPipelineByPropertyName=$true,ParameterSetName='1')]
+        [Alias("ZoneID")]$id
+    )
+    Begin
+    {
+    $class = "dashboard/zones"
+    $Expandproperty = "alert"
+    $Excludeproperty = ('_links','id')
+    $ContentType = "application/json"
+    $Method = "Get"
+    }
+    Process
+    {
+    $Uri = "$ECSbaseurl/$($class)/$($ID)?dataType=current"
+    try
+        {
+        Write-Verbose $Uri
+        Invoke-RestMethod -Uri $Uri -Headers $ECSAuthHeaders -Method $Method -ContentType $ContentType # | Select-Object  -ExpandProperty _embedded | Select-Object -ExpandProperty _instances  | Select-Object @{N="$($elementname)id";E={$_.id}},* -ExcludeProperty $Excludeproperty
+        }
+    catch
+        {
+        Get-ECSWebException -ExceptionMessage $_
+        #$_.Exception.Message
+        break
+        }
+    }
+    End
+    {
+
+    }
+}
+function Get-ECSHostedzone  {
+    [CmdletBinding(DefaultParameterSetName = '1')]
+    Param()
+    Begin
+    {
+    $Myself = $MyInvocation.MyCommand.Name.Substring(7).ToLower()
+    
+    $class = "dashboard/zones/$myself"
+    $Expandproperty = "alert"
+    $Excludeproperty = ('_links','id')
+    $ContentType = "application/json"
+    $Method = "Get"
+    }
+    Process
+    {
+    $Uri = "$ECSbaseurl/$($class)?dataType=current"
+    try
+        {
+        Write-Verbose $Uri
+        Invoke-RestMethod -Uri $Uri -Headers $ECSAuthHeaders -Method $Method -ContentType $ContentType  | Select-Object  -ExpandProperty _embedded | Select-Object -ExpandProperty _instances  | Select-Object @{N="$($elementname)id";E={$_.id}},* -ExcludeProperty $Excludeproperty
+        }
+    catch
+        {
+        Get-ECSWebException -ExceptionMessage $_
+        #$_.Exception.Message
+        break
+        }
+    }
+    End
+    {
+
+    }
+}
+
+
+##GET /dashboard/zones/hostedzone/replicationgroups
+function Get-ECSHostedzoneReplicationgroups  {
+    [CmdletBinding(DefaultParameterSetName = '1')]
+    Param()
+    Begin
+    {
+    $Myself = $MyInvocation.MyCommand.Name.Substring(17).ToLower()
+    
+    $class = "dashboard/zones/hostedzone"
+    $Expandproperty = "alert"
+    $Excludeproperty = ('_links','id')
+    $ContentType = "application/json"
+    $Method = "Get"
+    }
+    Process
+    {
+    $Uri = "$ECSbaseurl/$($class)/$($myself)?dataType=current"
+    try
+        {
+        Write-Verbose $Uri
+        Invoke-RestMethod -Uri $Uri -Headers $ECSAuthHeaders -Method $Method -ContentType $ContentType  | Select-Object  -ExpandProperty _embedded | Select-Object -ExpandProperty _instances  | Select-Object @{N="$($elementname)id";E={$_.id}},* -ExcludeProperty $Excludeproperty
         }
     catch
         {
