@@ -18,8 +18,8 @@
     }
     Process
     {
-    
-    #$JsonBody = @{ namespace = "$namespace" } | ConvertTo-Json 
+
+    #$JsonBody = @{ namespace = "$namespace" } | ConvertTo-Json
     $Uri = "$ECSbaseurl/object/bucket.json?namespace=$Namespace"
     if ($PSCmdlet.MyInvocation.BoundParameters["verbose"].IsPresent)
             {
@@ -113,7 +113,7 @@ function Get-ECSBucketInfo
     Param
     (
         [Parameter(Mandatory=$true,ValueFromPipelineByPropertyName=$true,ParameterSetName='1')]
-        [string]$Namespace,
+        [alias('ns')][string]$Namespace,
         [Parameter(Mandatory=$true,ValueFromPipelineByPropertyName=$true,ParameterSetName='1')]
         [alias('name')][string]$Bucketname
     )
@@ -126,9 +126,9 @@ function Get-ECSBucketInfo
     }
     Process
     {
-    $Body = @{  
+    $Body = @{
     namespace = "$Namespace"
-    }  
+    }
     $JSonBody = ConvertTo-Json $Body
     $Uri = "$ECSbaseurl/object/bucket/$Bucketname/info.json"
     try
@@ -150,7 +150,7 @@ function Get-ECSBucketInfo
 function Remove-ECSBucket
 {
     [CmdletBinding(DefaultParameterSetName = '1',
-                        SupportsShouldProcess=$true, 
+                        SupportsShouldProcess=$true,
                         ConfirmImpact='Medium')]
     Param
     (
@@ -170,8 +170,8 @@ function Remove-ECSBucket
     Process
     {
     if ($ConfirmPreference -match "none")
-        { 
-        $commit = 1 
+        {
+        $commit = 1
         }
     else
         {
@@ -201,7 +201,7 @@ function Remove-ECSBucket
             0
             {
             Write-Warning "bucket deletion  refused by user for bucket $Bucketname"
-            }      
+            }
         }
 
     }
@@ -220,7 +220,7 @@ function Add-ECSBucketTags
         [Parameter(Mandatory=$true,ValueFromPipelineByPropertyName=$true,ParameterSetName='1')]
         [string]$Key,
         [Parameter(Mandatory=$true,ValueFromPipelineByPropertyName=$false,ParameterSetName='1')]
-        $namespace = "ns1",
+        [alias('ns')][string]$Namespace,
         [Parameter(Mandatory=$true,ValueFromPipelineByPropertyName=$true,ParameterSetName='1')]
         [string]$Value
     )
@@ -237,7 +237,7 @@ function Add-ECSBucketTags
     $Uri = "$ECSbaseurl/$class/$Bucketname/tags.json"
     $JSonBody = [ordered]@{ TagSet = @(@{Key = $key
     Value = $Value })
-    namespace ="$Namespace"} | ConvertTo-Json 
+    namespace ="$Namespace"} | ConvertTo-Json
     try
         {
         if ($PSCmdlet.MyInvocation.BoundParameters["verbose"].IsPresent)
@@ -257,7 +257,7 @@ function Add-ECSBucketTags
     }
     End
     {
-    
+
     }
 }
 function Set-ECSBucketTags
@@ -270,7 +270,7 @@ function Set-ECSBucketTags
         [Parameter(Mandatory=$true,ValueFromPipelineByPropertyName=$true,ParameterSetName='1')]
         [string]$Key,
         [Parameter(Mandatory=$true,ValueFromPipelineByPropertyName=$false,ParameterSetName='1')]
-        $namespace = "ns1",
+        [alias('ns')][string]$Namespace,
         [Parameter(Mandatory=$true,ValueFromPipelineByPropertyName=$true,ParameterSetName='1')]
         [string]$Value
     )
@@ -287,7 +287,7 @@ function Set-ECSBucketTags
     $Uri = "$ECSbaseurl/$class/$Bucketname/tags.json"
     $JSonBody = [ordered]@{ TagSet = @(@{Key = $key
     Value = $Value })
-    namespace ="$Namespace"} | ConvertTo-Json 
+    namespace ="$Namespace"} | ConvertTo-Json
     try
         {
         if ($PSCmdlet.MyInvocation.BoundParameters["verbose"].IsPresent)
@@ -307,7 +307,7 @@ function Set-ECSBucketTags
     }
     End
     {
-    
+
     }
 }
 function Remove-ECSBucketTags
@@ -320,7 +320,7 @@ function Remove-ECSBucketTags
         [Parameter(Mandatory=$true,ValueFromPipelineByPropertyName=$true,ParameterSetName='1')]
         [string]$Key,
         [Parameter(Mandatory=$true,ValueFromPipelineByPropertyName=$false,ParameterSetName='1')]
-        $namespace = "ns1",
+        [alias('ns')][string]$Namespace,
         [Parameter(Mandatory=$true,ValueFromPipelineByPropertyName=$true,ParameterSetName='1')]
         [string]$Value
     )
@@ -337,7 +337,7 @@ function Remove-ECSBucketTags
     $Uri = "$ECSbaseurl/$class/$Bucketname/tags.json"
     $JSonBody = [ordered]@{ TagSet = @(@{Key = $key
     Value = $Value })
-    namespace ="$Namespace"} | ConvertTo-Json 
+    namespace ="$Namespace"} | ConvertTo-Json
     try
         {
         if ($PSCmdlet.MyInvocation.BoundParameters["verbose"].IsPresent)
@@ -357,7 +357,7 @@ function Remove-ECSBucketTags
     }
     End
     {
-    
+
     }
 }
 function Get-ECSBucketRetention
@@ -424,7 +424,7 @@ function Set-ECSBucketRetention
     Process
     {
     $JSonBody = [ordered]@{period = $period
-    namespace ="$Namespace"} | ConvertTo-Json 
+    namespace ="$Namespace"} | ConvertTo-Json
     try
         {
         if ($PSCmdlet.MyInvocation.BoundParameters["verbose"].IsPresent)
@@ -484,12 +484,12 @@ function Set-ECSBucketOwner
     namespace = $Namespace
     new_owner = $userId
     reset_previous_owners = $reset
-    } | ConvertTo-Json 
+    } | ConvertTo-Json
     if ($PSCmdlet.MyInvocation.BoundParameters["verbose"].IsPresent)
         {
         Write-Host -ForegroundColor Yellow "Calling $uri with Method $method and body:
         $JSonBody"
-        }    
+        }
     try
         {
         Invoke-RestMethod -Uri $Uri -Headers $ECSAuthHeaders -Method $method -Body $JSonBody -ContentType $ContentType # | Select-Object  -ExpandProperty $Expandproperty
@@ -500,7 +500,7 @@ function Set-ECSBucketOwner
         #$_.Exception.Message
         break
         }
-    Get-ECSBucketInfo -Namespace ns1 -Bucketname $Bucketname | Select-Object @{N="Bucketname";E={$_.name}},namespace,owner
+    #Get-ECSBucketInfo -Namespace $Namespace -Bucketname $Bucketname | Select-Object @{N="Bucketname";E={$_.name}},namespace,owner
     }
     End
     {
@@ -541,12 +541,12 @@ function Set-ECSBucketStale
     $JSonBody = [ordered]@{
     is_stale_allowed = $stale
     namespace = $Namespace
-    } | ConvertTo-Json 
+    } | ConvertTo-Json
     if ($PSCmdlet.MyInvocation.BoundParameters["verbose"].IsPresent)
         {
         Write-Host -ForegroundColor Yellow "Calling $uri with Method $method and body:
         $JSonBody"
-        }    
+        }
     try
         {
         Invoke-RestMethod -Uri $Uri -Headers $ECSAuthHeaders -Method $method -Body $JSonBody -ContentType $ContentType # | Select-Object  -ExpandProperty $Expandproperty
@@ -557,7 +557,7 @@ function Set-ECSBucketStale
         #$_.Exception.Message
         break
         }
-    Get-ECSBucketInfo -Namespace ns1 -Bucketname $Bucketname | Select-Object @{N="Bucketname";E={$_.name}},namespace,owner, is_stale_allowed
+    Get-ECSBucketInfo -Namespace $Namesapce -Bucketname $Bucketname | Select-Object @{N="Bucketname";E={$_.name}},namespace,owner, is_stale_allowed
     }
     End
     {
@@ -813,7 +813,7 @@ function Get-ECSBucketACL
     {
     $Uri = "$ECSbaseurl/object/bucket/$BucketName/acl.json?namespace=$Namespace"
     try
-        {    
+        {
 
         Write-Verbose $Uri
         Invoke-RestMethod -Uri $Uri -Headers $ECSAuthHeaders -Method $method -ContentType $ContentType | Select-Object namespace -ExpandProperty ACL
@@ -840,7 +840,7 @@ function Add-ECSBucketMetadata
         [ValidateSet('s3','cas','swift','Hadoop')]
         $head_type,
         [Parameter(Mandatory=$true,ValueFromPipelineByPropertyName=$false,ParameterSetName='1')]
-        $namespace = "ns1",
+        [alias('ns')][string]$Namespace,
         [Parameter(Mandatory=$true,ValueFromPipelineByPropertyName=$true,ParameterSetName='1')]
         [string]$name,
         [Parameter(Mandatory=$true,ValueFromPipelineByPropertyName=$true,ParameterSetName='1')]
@@ -860,7 +860,7 @@ function Add-ECSBucketMetadata
     $JSonBody = [ordered]@{ head_type = $head_type
     metadata = @(@{name = $name
     value = $Value })
-    namespace ="$Namespace"} | ConvertTo-Json 
+    namespace ="$Namespace"} | ConvertTo-Json
     try
         {
         if ($PSCmdlet.MyInvocation.BoundParameters["verbose"].IsPresent)
@@ -880,7 +880,7 @@ function Add-ECSBucketMetadata
     }
     End
     {
-    
+
     }
 }
 function Set-ECSBucketMetadata
@@ -893,7 +893,7 @@ function Set-ECSBucketMetadata
         [Parameter(Mandatory=$true,ValueFromPipelineByPropertyName=$true,ParameterSetName='1')]
         [string]$Key,
         [Parameter(Mandatory=$true,ValueFromPipelineByPropertyName=$false,ParameterSetName='1')]
-        $namespace = "ns1",
+        [alias('ns')][string]$Namespace,
         [Parameter(Mandatory=$true,ValueFromPipelineByPropertyName=$true,ParameterSetName='1')]
         [string]$Value
     )
@@ -910,7 +910,7 @@ function Set-ECSBucketMetadata
     $Uri = "$ECSbaseurl/$class/$Bucketname/tags.json"
     $JSonBody = [ordered]@{ TagSet = @(@{Key = $key
     Value = $Value })
-    namespace ="$Namespace"} | ConvertTo-Json 
+    namespace ="$Namespace"} | ConvertTo-Json
     try
         {
         if ($PSCmdlet.MyInvocation.BoundParameters["verbose"].IsPresent)
@@ -930,7 +930,7 @@ function Set-ECSBucketMetadata
     }
     End
     {
-    
+
     }
 }
 function Remove-ECSBucketMetadata
@@ -943,7 +943,7 @@ function Remove-ECSBucketMetadata
         [Parameter(Mandatory=$true,ValueFromPipelineByPropertyName=$true,ParameterSetName='1')]
         [string]$Key,
         [Parameter(Mandatory=$true,ValueFromPipelineByPropertyName=$false,ParameterSetName='1')]
-        $namespace = "ns1",
+        [alias('ns')][string]$Namespace,
         [Parameter(Mandatory=$true,ValueFromPipelineByPropertyName=$true,ParameterSetName='1')]
         [string]$Value
     )
@@ -960,7 +960,7 @@ function Remove-ECSBucketMetadata
     $Uri = "$ECSbaseurl/$class/$Bucketname/tags.json"
     $JSonBody = [ordered]@{ TagSet = @(@{Key = $key
     Value = $Value })
-    namespace ="$Namespace"} | ConvertTo-Json 
+    namespace ="$Namespace"} | ConvertTo-Json
     try
         {
         if ($PSCmdlet.MyInvocation.BoundParameters["verbose"].IsPresent)
@@ -980,7 +980,7 @@ function Remove-ECSBucketMetadata
     }
     End
     {
-    
+
     }
 }
 function Get-ECSBucketSearchMetadata
@@ -1026,7 +1026,7 @@ function Remove-ECSBucketSearchMetadata
         [Parameter(Mandatory=$true,ValueFromPipelineByPropertyName=$true,ParameterSetName='1')]
         [alias('name')][string]$Bucketname,
         [Parameter(Mandatory=$true,ValueFromPipelineByPropertyName=$false,ParameterSetName='1')]
-        $namespace = "ns1"
+        [alias('ns')][string]$Namespace
     )
     Begin
     {
@@ -1057,7 +1057,7 @@ function Remove-ECSBucketSearchMetadata
     }
     End
     {
-    
+
     }
 }
 function Set-ECSBucketDefaultGroupPermissions
@@ -1070,7 +1070,7 @@ function Set-ECSBucketDefaultGroupPermissions
         [Parameter(Mandatory=$true,ValueFromPipelineByPropertyName=$false,ParameterSetName='1')]
         $namespace,
         [Parameter(Mandatory=$true,ValueFromPipelineByPropertyName=$false,ParameterSetName='1')]
-        $default_group, 
+        $default_group,
         [Parameter(Mandatory=$false,ValueFromPipelineByPropertyName=$true,ParameterSetName='1')]
         [switch]$default_group_file_read_permission,
         [Parameter(Mandatory=$false,ValueFromPipelineByPropertyName=$true,ParameterSetName='1')]
@@ -1096,7 +1096,7 @@ function Set-ECSBucketDefaultGroupPermissions
     Process
     {
     $Uri = "$ECSbaseurl/$class/$Bucketname/defaultGroup.json"
-    $JSonBody = [ordered]@{ 
+    $JSonBody = [ordered]@{
     default_group_file_read_permission = $default_group_file_read_permission.IsPresent
 default_group_file_write_permission = $default_group_file_write_permission.IsPresent
 default_group_file_execute_permission = $default_group_file_execute_permission.IsPresent
@@ -1104,7 +1104,7 @@ default_group_dir_read_permission   = $default_group_dir_read_permission.IsPrese
 default_group_dir_write_permission  = $default_group_dir_write_permission.IsPresent
 default_group_dir_execute_permission = $default_group_file_execute_permission.IsPresent
 default_group = $default_group
-namespace ="$Namespace"} | ConvertTo-Json 
+namespace ="$Namespace"} | ConvertTo-Json
     try
         {
         if ($PSCmdlet.MyInvocation.BoundParameters["verbose"].IsPresent)
@@ -1124,7 +1124,7 @@ namespace ="$Namespace"} | ConvertTo-Json
     }
     End
     {
-    
+
     }
 }
 function Get-ECSBucketACLGroups
